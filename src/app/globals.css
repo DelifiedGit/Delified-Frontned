@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    --primary: 328 85% 64%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 222 47% 11%;
+    
+    --muted: 0 0% 96%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 328 85% 64%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 222 47% 11%;
+    
+    --radius: 0.5rem;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom styles for buttons */
+.btn-primary {
+  @apply bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white;
+}
+
+.btn-secondary {
+  @apply bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white;
+}
+
+/* Navigation menu hover effects */
+.nav-link {
+  @apply transition-colors hover:text-[#E03D8D];
+}
+
+/* Card hover effects */
+.card-hover {
+  @apply transition-all hover:shadow-lg hover:shadow-[#E03D8D]/10;
+}
