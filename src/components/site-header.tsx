@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { Menu, Search, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,9 +11,27 @@ import {
   SheetContent,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { logout } from '@/lib/api'
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token')
+    setIsLoggedIn(!!token)
+  }, [])
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setIsLoggedIn(false)
+      router.push('/login')
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
+  }
 
   return (
     <>
@@ -41,6 +60,9 @@ export function SiteHeader() {
                     <div className="grid gap-2">
                       <Link href="/muns" className="text-sm hover:text-[#E03D8D] transition-colors">MUNs</Link>
                       <Link href="/mun-guide" className="text-sm hover:text-[#E03D8D] transition-colors">MUN Guide</Link>
+                      {isLoggedIn && (
+                        <Link href="/dashboard" className="text-sm hover:text-[#E03D8D] transition-colors">Dashboard</Link>
+                      )}
                     </div>
                   </nav>
                 </SheetContent>
@@ -54,13 +76,15 @@ export function SiteHeader() {
                   className="rounded-lg"
                 />
               </Link>
-            
             </div>
 
             {/* Desktop Navigation Menu */}
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/muns" className="text-sm hover:text-[#E03D8D] transition-colors">MUNs</Link>
               <Link href="/mun-guide" className="text-sm hover:text-[#E03D8D] transition-colors">MUN Guide</Link>
+              {isLoggedIn && (
+                <Link href="/dashboard" className="text-sm hover:text-[#E03D8D] transition-colors">Dashboard</Link>
+              )}
             </nav>
 
             <div className="flex items-center space-x-4">
@@ -72,16 +96,28 @@ export function SiteHeader() {
                   List MUN
                 </Button>
               </Link>
-              <Link href="/signup">
-                <Button className="bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white">
-                  Sign Up
+              {isLoggedIn ? (
+                <Button onClick={handleLogout} className="bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white">
+                  Logout
                 </Button>
-              </Link>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button className="bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button className="bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
       </header>
-      
     </>
   )
 }

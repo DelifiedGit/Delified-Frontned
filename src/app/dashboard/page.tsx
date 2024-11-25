@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Calendar, MapPin, Users } from 'lucide-react'
+import { logout } from '@/lib/api'
 
 interface MUN {
   id: string
@@ -35,14 +36,28 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
+        const token = localStorage.getItem('auth_token')
+        if (!token) {
+          router.push('/login')
+          return
+        }
+
         // Fetch user profile
-        const profileResponse = await fetch('/api/user/profile')
+        const profileResponse = await fetch('http://localhost:8000/api/user/profile', {
+          headers: {
+            'Authorization': `Token ${token}`
+          }
+        })
         if (!profileResponse.ok) throw new Error('Failed to fetch user profile')
         const profileData = await profileResponse.json()
         setUserProfile(profileData)
 
         // Fetch MUNs data
-        const munsResponse = await fetch('/api/muns/dashboard')
+        const munsResponse = await fetch('http://localhost:8000/api/muns/dashboard', {
+          headers: {
+            'Authorization': `Token ${token}`
+          }
+        })
         if (!munsResponse.ok) throw new Error('Failed to fetch MUNs data')
         const munsData = await munsResponse.json()
         setPastMUNs(munsData.past)
@@ -57,11 +72,11 @@ export default function DashboardPage() {
     }
 
     fetchDashboardData()
-  }, [])
+  }, [router])
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
+      await logout()
       router.push('/login')
     } catch (error) {
       console.error('Logout failed:', error)
