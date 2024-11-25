@@ -31,14 +31,15 @@ export default function LoginPage() {
       })
 
       if (!response.ok) {
-        throw new Error('Login failed')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Login failed')
       }
 
       // Login successful
       router.push('/dashboard') // Redirect to dashboard or home page
     } catch (error) {
       console.error('Login error:', error)
-      setError('Invalid email or password. Please try again.')
+      setError(error instanceof Error ? error.message : 'Invalid email or password. Please try again.')
     } finally {
       setIsLoading(false)
     }

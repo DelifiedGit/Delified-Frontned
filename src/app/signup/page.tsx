@@ -22,27 +22,35 @@ export default function SignupPage() {
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData)
 
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-
-      if (!response.ok) {
-        throw new Error('Signup failed')
+      // Basic form validation
+      if (data.password !== data.confirmPassword) {
+        setError('Passwords do not match')
+        setIsLoading(false)
+        return
       }
 
-      // Signup successful
-      router.push('/login') // Redirect to login page
-    } catch (error) {
-      console.error('Signup error:', error)
-      setError('An error occurred during signup. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
+      try {
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+  
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.error || 'Signup failed')
+        }
+  
+        // Signup successful
+        router.push('/dashboard') // Redirect to dashboard after successful signup
+      } catch (error) {
+        console.error('Signup error:', error)
+        setError(error instanceof Error ? error.message : 'An error occurred during signup. Please try again.')
+      } finally {
+        setIsLoading(false)
+      }
   }
 
   return (
