@@ -6,5 +6,8 @@
   "/api/auth/login/route": "app/api/auth/login/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/muns/page": "app/muns/page.js",
-  "/api/muns/route": "app/api/muns/route.js"
+  "/api/muns/route": "app/api/muns/route.js",
+  "/about/page": "app/about/page.js",
+  "/support/page": "app/support/page.js",
+  "/contact/page": "app/contact/page.js"
 }

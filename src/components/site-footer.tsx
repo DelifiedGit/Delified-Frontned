@@ -23,12 +23,6 @@ export function SiteFooter() {
               <li>
                 <Link href="/about" className="text-gray-400 hover:text-white">About Delified</Link>
               </li>
-              <li>
-                <Link href="/careers" className="text-gray-400 hover:text-white">Careers</Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-gray-400 hover:text-white">Blog</Link>
-              </li>
             </ul>
           </div>
           <div className="space-y-4">
@@ -38,10 +32,7 @@ export function SiteFooter() {
                 <Link href="/list-mun" className="text-gray-400 hover:text-white">List Your MUN</Link>
               </li>
               <li>
-                <Link href="/organizer-guidelines" className="text-gray-400 hover:text-white">Organizer Guidelines</Link>
-              </li>
-              <li>
-                <Link href="/organizer-support" className="text-gray-400 hover:text-white">Organizer Support</Link>
+                <Link href="/support" className="text-gray-400 hover:text-white">Support</Link>
               </li>
             </ul>
           </div>
@@ -51,12 +42,7 @@ export function SiteFooter() {
               <li>
                 <Link href="/contact" className="text-gray-400 hover:text-white">Contact Us</Link>
               </li>
-              <li>
-                <Link href="/privacy" className="text-gray-400 hover:text-white">Privacy Policy</Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-gray-400 hover:text-white">Terms & Conditions</Link>
-              </li>
+              
             </ul>
           </div>
           <div className="space-y-4">
