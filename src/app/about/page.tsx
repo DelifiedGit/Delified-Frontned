@@ -6,19 +6,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-center mb-8 text-[#E03D8D]">About Dublieu MUNs</h1>
+      <h1 className="text-4xl font-bold text-center mb-8 text-[#E03D8D]">About Delified MUNs</h1>
       
       {/* How We Started */}
       <section className="mb-16">
         <h2 className="text-3xl font-semibold mb-4">Our Journey</h2>
         <p className="text-lg mb-4">
-          Dublieu MUNs was born in 2020 from a passion for Model United Nations and a vision to make these 
+          Delified MUNs was born in 2020 from a passion for Model United Nations and a vision to make these 
           transformative experiences accessible to students across India. What started as a small team of MUN 
           enthusiasts has grown into India's leading platform for MUN conferences, competitions, and resources.
         </p>
         <Image 
           src="/placeholder.jpeg" 
-          alt="Dublieu MUNs Journey" 
+          alt="Delified MUNs Journey" 
           width={800} 
           height={400} 
           className="rounded-lg mx-auto"
@@ -73,7 +73,7 @@ export default function AboutPage() {
             />
             <div>
               <p className="text-lg mb-4">
-                "Dublieu MUNs was born from a simple idea: to make the transformative experience of 
+                "Delified MUNs was born from a simple idea: to make the transformative experience of 
                 Model United Nations accessible to every student in India. Our journey has been one of 
                 passion, perseverance, and the unwavering belief in the power of youth to shape our world. 
                 As we continue to grow, our commitment remains the same – to empower the next generation 
@@ -133,7 +133,7 @@ export default function AboutPage() {
 
       {/* Join Us */}
       <section className="text-center">
-        <h2 className="text-3xl font-semibold mb-4">Join the Dublieu MUNs Community</h2>
+        <h2 className="text-3xl font-semibold mb-4">Join the Delified MUNs Community</h2>
         <p className="text-lg mb-6">
           Whether you're a student looking to participate in MUNs or an organizer wanting to host one, 
           we're here to support your journey.

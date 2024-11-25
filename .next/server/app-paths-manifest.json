@@ -1,13 +1,15 @@
 {
-  "/page": "app/page.js",
-  "/signup/page": "app/signup/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/login/page": "app/login/page.js",
-  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/mun-guide/page": "app/mun-guide/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
   "/muns/page": "app/muns/page.js",
   "/api/muns/route": "app/api/muns/route.js",
-  "/about/page": "app/about/page.js",
-  "/support/page": "app/support/page.js",
-  "/contact/page": "app/contact/page.js"
+  "/signup/page": "app/signup/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/list-mun/page": "app/list-mun/page.js",
+  "/login/page": "app/login/page.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/muns/[id]/page": "app/muns/[id]/page.js",
+  "/api/muns/[id]/route": "app/api/muns/[id]/route.js",
+  "/about/page": "app/about/page.js"
 }

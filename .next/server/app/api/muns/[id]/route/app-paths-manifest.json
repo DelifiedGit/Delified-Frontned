@@ -1,0 +1,3 @@
+{
+  "/api/muns/[id]/route": "app/api/muns/[id]/route.js"
+}

@@ -105,7 +105,7 @@ function AboutPage() {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                 className: "text-4xl font-bold text-center mb-8 text-[#E03D8D]",
-                children: "About Dublieu MUNs"
+                children: "About Delified MUNs"
             }, void 0, false, {
                 fileName: "[project]/src/app/about/page.tsx",
                 lineNumber: 9,
@@ -124,7 +124,7 @@ function AboutPage() {
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-lg mb-4",
-                        children: "Dublieu MUNs was born in 2020 from a passion for Model United Nations and a vision to make these transformative experiences accessible to students across India. What started as a small team of MUN enthusiasts has grown into India's leading platform for MUN conferences, competitions, and resources."
+                        children: "Delified MUNs was born in 2020 from a passion for Model United Nations and a vision to make these transformative experiences accessible to students across India. What started as a small team of MUN enthusiasts has grown into India's leading platform for MUN conferences, competitions, and resources."
                     }, void 0, false, {
                         fileName: "[project]/src/app/about/page.tsx",
                         lineNumber: 14,
@@ -132,7 +132,7 @@ function AboutPage() {
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
                         src: "/placeholder.jpeg",
-                        alt: "Dublieu MUNs Journey",
+                        alt: "Delified MUNs Journey",
                         width: 800,
                         height: 400,
                         className: "rounded-lg mx-auto"
@@ -287,7 +287,7 @@ function AboutPage() {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-lg mb-4",
-                                            children: '"Dublieu MUNs was born from a simple idea: to make the transformative experience of Model United Nations accessible to every student in India. Our journey has been one of passion, perseverance, and the unwavering belief in the power of youth to shape our world. As we continue to grow, our commitment remains the same – to empower the next generation of leaders, thinkers, and changemakers."'
+                                            children: '"Delified MUNs was born from a simple idea: to make the transformative experience of Model United Nations accessible to every student in India. Our journey has been one of passion, perseverance, and the unwavering belief in the power of youth to shape our world. As we continue to grow, our commitment remains the same – to empower the next generation of leaders, thinkers, and changemakers."'
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/about/page.tsx",
                                             lineNumber: 75,
@@ -508,7 +508,7 @@ function AboutPage() {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                         className: "text-3xl font-semibold mb-4",
-                        children: "Join the Dublieu MUNs Community"
+                        children: "Join the Delified MUNs Community"
                     }, void 0, false, {
                         fileName: "[project]/src/app/about/page.tsx",
                         lineNumber: 136,
