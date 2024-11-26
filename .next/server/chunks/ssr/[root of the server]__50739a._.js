@@ -263,53 +263,69 @@ SheetDescription.displayName = __TURBOPACK__imported__module__$5b$project$5d2f$n
 var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_import__, s: __turbopack_esm__, v: __turbopack_export_value__, n: __turbopack_export_namespace__, c: __turbopack_cache__, M: __turbopack_modules__, l: __turbopack_load__, j: __turbopack_dynamic__, P: __turbopack_resolve_absolute_path__, U: __turbopack_relative_url__, R: __turbopack_resolve_module_id_path__, b: __turbopack_worker_blob_url__, g: global, __dirname, x: __turbopack_external_require__, y: __turbopack_external_import__, z: require } = __turbopack_context__;
 {
 __turbopack_esm__({
-    "fetchDashboardData": (()=>fetchDashboardData),
+    "getMUNsDashboard": (()=>getMUNsDashboard),
+    "getUserProfile": (()=>getUserProfile),
     "login": (()=>login),
     "logout": (()=>logout),
-    "signUp": (()=>signUp)
+    "signup": (()=>signup)
 });
-const API_BASE_URL = 'http://localhost:8000/api';
-async function signUp(userData) {
-    const response = await fetch(`${API_BASE_URL}/signup/`, {
+const API_BASE_URL = 'http://localhost:8000';
+async function login(email, password) {
+    const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(userData)
-    });
-    if (!response.ok) {
-        throw new Error('Signup failed');
-    }
-    return response.json();
-}
-async function login(credentials) {
-    const response = await fetch(`${API_BASE_URL}/login/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
+        body: JSON.stringify({
+            email,
+            password
+        }),
+        credentials: 'include'
     });
     if (!response.ok) {
         throw new Error('Login failed');
     }
     return response.json();
 }
-async function logout() {
-    localStorage.removeItem('auth_token');
-}
-async function fetchDashboardData() {
-    const token = localStorage.getItem('auth_token');
-    if (!token) {
-        throw new Error('No authentication token found');
-    }
-    const response = await fetch(`${API_BASE_URL}/dashboard/`, {
+async function signup(userData) {
+    const response = await fetch(`${API_BASE_URL}/api/signup`, {
+        method: 'POST',
         headers: {
-            'Authorization': `Token ${token}`
-        }
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData),
+        credentials: 'include'
     });
     if (!response.ok) {
-        throw new Error('Failed to fetch dashboard data');
+        throw new Error('Signup failed');
+    }
+    return response.json();
+}
+async function logout() {
+    const response = await fetch(`${API_BASE_URL}/api/logout`, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    if (!response.ok) {
+        throw new Error('Logout failed');
+    }
+    return response.json();
+}
+async function getUserProfile() {
+    const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
+        credentials: 'include'
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch user profile');
+    }
+    return response.json();
+}
+async function getMUNsDashboard() {
+    const response = await fetch(`${API_BASE_URL}/api/muns/dashboard`, {
+        credentials: 'include'
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch MUNs dashboard');
     }
     return response.json();
 }

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Calendar, MapPin, Users } from 'lucide-react'
-import { logout } from '@/lib/api'
+import { getUserProfile, getMUNsDashboard, logout } from '@/lib/api'
 
 interface MUN {
   id: string
@@ -36,36 +36,16 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const token = localStorage.getItem('auth_token')
-        if (!token) {
-          router.push('/login')
-          return
-        }
-
-        // Fetch user profile
-        const profileResponse = await fetch('http://localhost:8000/api/user/profile', {
-          headers: {
-            'Authorization': `Token ${token}`
-          }
-        })
-        if (!profileResponse.ok) throw new Error('Failed to fetch user profile')
-        const profileData = await profileResponse.json()
+        const profileData = await getUserProfile()
         setUserProfile(profileData)
 
-        // Fetch MUNs data
-        const munsResponse = await fetch('http://localhost:8000/api/muns/dashboard', {
-          headers: {
-            'Authorization': `Token ${token}`
-          }
-        })
-        if (!munsResponse.ok) throw new Error('Failed to fetch MUNs data')
-        const munsData = await munsResponse.json()
+        const munsData = await getMUNsDashboard()
         setPastMUNs(munsData.past)
         setRegisteredMUNs(munsData.registered)
         setUpcomingMUNs(munsData.upcoming)
       } catch (error) {
         console.error('Error fetching dashboard data:', error)
-        // Handle error (e.g., show error message to user)
+        router.push('/login')
       } finally {
         setIsLoading(false)
       }

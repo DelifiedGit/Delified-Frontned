@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { signUp } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { signup } from '@/lib/api'
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -29,9 +29,8 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await signUp(formData)
-      localStorage.setItem('auth_token', response.token)
-      router.push('/dashboard')
+      await signup(formData)
+      router.push('/')
     } catch (error) {
       setError('Signup failed. Please try again.')
     }
