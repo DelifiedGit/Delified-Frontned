@@ -1,71 +1,65 @@
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:8000/api';
 
-export async function login(email: string, password: string) {
-  const response = await fetch(`${API_BASE_URL}/api/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password }),
-    credentials: 'include',
-  });
-  if (!response.ok) {
-    throw new Error('Login failed');
-  }
-  return response.json();
-}
-
-export async function signup(userData: {
+export async function signUp(userData: {
   email: string;
-  password: string;
   full_name: string;
   username: string;
   gender: string;
   date_of_birth: string;
   contact_number: string;
   institution: string;
+  password: string;
 }) {
-  const response = await fetch(`${API_BASE_URL}/api/signup`, {
+  const response = await fetch(`${API_BASE_URL}/signup/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(userData),
-    credentials: 'include',
   });
+
   if (!response.ok) {
     throw new Error('Signup failed');
   }
+
+  return response.json();
+}
+
+export async function login(credentials: { email: string; password: string }) {
+  const response = await fetch(`${API_BASE_URL}/login/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(credentials),
+  });
+
+  if (!response.ok) {
+    throw new Error('Login failed');
+  }
+
   return response.json();
 }
 
 export async function logout() {
-  const response = await fetch(`${API_BASE_URL}/api/logout`, {
-    method: 'POST',
-    credentials: 'include',
-  });
-  if (!response.ok) {
-    throw new Error('Logout failed');
-  }
-  return response.json();
+  localStorage.removeItem('auth_token');
 }
 
-export async function getUserProfile() {
-  const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
-    credentials: 'include',
-  });
-  if (!response.ok) {
-    throw new Error('Failed to fetch user profile');
+export async function fetchDashboardData() {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
   }
-  return response.json();
-}
 
-export async function getMUNsDashboard() {
-  const response = await fetch(`${API_BASE_URL}/api/muns/dashboard`, {
-    credentials: 'include',
+  const response = await fetch(`${API_BASE_URL}/dashboard/`, {
+    headers: {
+      'Authorization': `Token ${token}`,
+    },
   });
+
   if (!response.ok) {
-    throw new Error('Failed to fetch MUNs dashboard');
+    throw new Error('Failed to fetch dashboard data');
   }
+
   return response.json();
 }
