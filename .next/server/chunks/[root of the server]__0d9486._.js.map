@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 47, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/src/app/api/muns/register/route.ts"],"sourcesContent":["import { NextResponse } from 'next/server'\n\nexport async function POST(request: Request) {\n  const body = await request.json()\n\n  // TODO: Validate input\n  // TODO: Save registration to database\n  // TODO: Send confirmation email\n\n  const registration = {\n    id: Date.now().toString(),\n    ...body,\n    status: 'pending'\n  }\n\n  return NextResponse.json(registration, { status: 201 })\n}"],"names":[],"mappings":";;;AAAA;;AAEO,eAAe,KAAK,OAAgB;IACzC,MAAM,OAAO,MAAM,QAAQ,IAAI;IAE/B,uBAAuB;IACvB,sCAAsC;IACtC,gCAAgC;IAEhC,MAAM,eAAe;QACnB,IAAI,KAAK,GAAG,GAAG,QAAQ;QACvB,GAAG,IAAI;QACP,QAAQ;IACV;IAEA,OAAO,gIAAA,CAAA,eAAY,CAAC,IAAI,CAAC,cAAc;QAAE,QAAQ;IAAI;AACvD"}},
+    {"offset": {"line": 66, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Calendar, MapPin, Users, Clock } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Calendar, MapPin } from 'lucide-react'
 import { MunRegistrationForm } from '@/components/mun-registration-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchMUNById } from '@/lib/api'
@@ -27,6 +26,7 @@ export default function MUNDetailContent({ id }: { id: string }) {
       try {
         setIsLoading(true)
         const event = await fetchMUNById(id)
+        console.log(event)
         setMunEvent(event)
       } catch (error) {
         console.log('Error fetching MUN event:', error)
@@ -86,7 +86,7 @@ export default function MUNDetailContent({ id }: { id: string }) {
               <CardContent>
                 {Object.entries(munEvent.custom_fields).map(([key, value]) => (
                   <div key={key} className="mb-2">
-                    <strong>{key}:</strong> {Array.isArray(value) ? value.join(', ') : value}
+                    <strong>{key}:</strong> {Array.isArray(value) ? value.join(', ') : String(value)}
                   </div>
                 ))}
               </CardContent>
@@ -94,7 +94,12 @@ export default function MUNDetailContent({ id }: { id: string }) {
           )}
           <div className="flex items-center justify-between">
             <span className="text-3xl font-bold text-[#4763FF]">₹{munEvent.registration_fees}</span>
-            <MunRegistrationForm munTitle={munEvent.event_name} munId={munEvent.id} price={munEvent.registration_fees} customFields={munEvent.custom_fields} />
+            <MunRegistrationForm 
+              munTitle={munEvent.event_name} 
+              munId={munEvent.id} 
+              price={munEvent.registration_fees} 
+              customFields={munEvent.custom_fields || {}} 
+            />
           </div>
         </div>
       </div>

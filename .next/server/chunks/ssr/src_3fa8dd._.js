@@ -961,6 +961,7 @@ function MUNDetailContent({ id }) {
             try {
                 setIsLoading(true);
                 const event = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchMUNById"])(id);
+                console.log(event);
                 setMunEvent(event);
             } catch (error) {
                 console.log('Error fetching MUN event:', error);
@@ -1126,7 +1127,7 @@ function MUNDetailContent({ id }) {
                                                     columnNumber: 21
                                                 }, this),
                                                 " ",
-                                                Array.isArray(value) ? value.join(', ') : value
+                                                Array.isArray(value) ? value.join(', ') : String(value)
                                             ]
                                         }, key, true, {
                                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
@@ -1162,7 +1163,7 @@ function MUNDetailContent({ id }) {
                                     munTitle: munEvent.event_name,
                                     munId: munEvent.id,
                                     price: munEvent.registration_fees,
-                                    customFields: munEvent.custom_fields
+                                    customFields: munEvent.custom_fields || {}
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
                                     lineNumber: 97,
