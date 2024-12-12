@@ -63,3 +63,38 @@ export async function fetchDashboardData() {
 
   return response.json();
 }
+
+export async function createMUN(munData: {
+  event_name: string;
+  date: string;
+  venue: string;
+  registration_fees: number;
+  custom_fields: Record<string, any>;
+}) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  // Ensure registration_fees is a number
+  const formattedData = {
+    ...munData,
+    registration_fees: Number(munData.registration_fees)
+  };
+
+  const response = await fetch(`${API_BASE_URL}/muns/create/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${token}`,
+    },
+    body: JSON.stringify(formattedData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`Failed to create MUN: ${JSON.stringify(errorData)}`);
+  }
+
+  return response.json();
+}

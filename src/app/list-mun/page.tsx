@@ -6,9 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Checkbox } from '@/components/ui/checkbox'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { createMUN } from '@/lib/api'
 
 type FieldType = 'text' | 'number' | 'dropdown' | 'checkbox' | 'radio'
 
@@ -26,6 +25,9 @@ export default function ListMUNPage() {
   const [registrationFees, setRegistrationFees] = useState('')
   const [customFields, setCustomFields] = useState<CustomField[]>([])
   const [newFieldType, setNewFieldType] = useState<FieldType>('text')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
   const router = useRouter()
 
   const addCustomField = () => {
@@ -48,18 +50,59 @@ export default function ListMUNPage() {
     setCustomFields(customFields.filter(field => field.id !== id))
   }
 
+  const formatCustomFieldsForAPI = (fields: CustomField[]) => {
+    return fields.reduce((acc, field) => {
+      acc[field.label] = {
+        type: field.type,
+        options: field.options
+      }
+      return acc
+    }, {} as Record<string, any>)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement form submission logic
-    console.log('Form submitted:', { eventName, date, venue, registrationFees, customFields })
-    // Redirect to MUNs list page after submission
-    router.push('/api/muns/create')
-    router.push('/muns')
+    setIsSubmitting(true)
+    setError(null)
+    setSuccess(null)
+    
+    try {
+      const munData = {
+        event_name: eventName,
+        date,
+        venue,
+        registration_fees: Number(registrationFees),
+        custom_fields: formatCustomFieldsForAPI(customFields)
+      }
+      
+      await createMUN(munData)
+      setSuccess('MUN created successfully')
+      setTimeout(() => {
+        router.push('/muns')
+      }, 2000)
+    } catch (error) {
+      console.error('Error creating MUN:', error)
+      setError(error instanceof Error ? error.message : 'Failed to create MUN')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">List Your MUN</h1>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">Error!</strong>
+          <span className="block sm:inline"> {error}</span>
+        </div>
+      )}
+      {success && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">Success!</strong>
+          <span className="block sm:inline"> {success}</span>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <Label htmlFor="eventName">Event Name</Label>
@@ -94,6 +137,8 @@ export default function ListMUNPage() {
           <Input
             id="registrationFees"
             type="number"
+            step="0.01"
+            min="0"
             value={registrationFees}
             onChange={(e) => setRegistrationFees(e.target.value)}
             required
@@ -163,8 +208,11 @@ export default function ListMUNPage() {
           </Button>
         </div>
 
-        <Button type="submit">Submit MUN Listing</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Creating...' : 'Submit MUN Listing'}
+        </Button>
       </form>
     </div>
   )
 }
+

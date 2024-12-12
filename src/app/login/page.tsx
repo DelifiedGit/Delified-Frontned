@@ -20,7 +20,7 @@ export default function LoginPage() {
       console.log(email)
       const response = await login({ email, password })
       localStorage.setItem('auth_token', response.token)
-      router.push('/dashboard')
+      router.push('/')
     } catch (error) {
       setError('Login failed. Please check your credentials.')
     }

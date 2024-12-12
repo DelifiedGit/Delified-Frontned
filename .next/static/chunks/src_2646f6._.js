@@ -409,9 +409,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$i
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/label.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/select.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/card.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/lib/api.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_refresh__.signature();
 'use client';
+;
 ;
 ;
 ;
@@ -427,6 +429,9 @@ function ListMUNPage() {
     const [registrationFees, setRegistrationFees] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [customFields, setCustomFields] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [newFieldType, setNewFieldType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('text');
+    const [isSubmitting, setIsSubmitting] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [success, setSuccess] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const addCustomField = ()=>{
         const newField = {
@@ -451,19 +456,39 @@ function ListMUNPage() {
     const removeCustomField = (id)=>{
         setCustomFields(customFields.filter((field)=>field.id !== id));
     };
+    const formatCustomFieldsForAPI = (fields)=>{
+        return fields.reduce((acc, field)=>{
+            acc[field.label] = {
+                type: field.type,
+                options: field.options
+            };
+            return acc;
+        }, {});
+    };
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        // TODO: Implement form submission logic
-        console.log('Form submitted:', {
-            eventName,
-            date,
-            venue,
-            registrationFees,
-            customFields
-        });
-        // Redirect to MUNs list page after submission
-        router.push('/api/muns/create');
-        router.push('/muns');
+        setIsSubmitting(true);
+        setError(null);
+        setSuccess(null);
+        try {
+            const munData = {
+                event_name: eventName,
+                date,
+                venue,
+                registration_fees: Number(registrationFees),
+                custom_fields: formatCustomFieldsForAPI(customFields)
+            };
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createMUN"])(munData);
+            setSuccess('MUN created successfully');
+            setTimeout(()=>{
+                router.push('/muns');
+            }, 2000);
+        } catch (error) {
+            console.error('Error creating MUN:', error);
+            setError(error instanceof Error ? error.message : 'Failed to create MUN');
+        } finally{
+            setIsSubmitting(false);
+        }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "container mx-auto px-4 py-8",
@@ -473,8 +498,66 @@ function ListMUNPage() {
                 children: "List Your MUN"
             }, void 0, false, {
                 fileName: "[project]/src/app/list-mun/page.tsx",
-                lineNumber: 62,
+                lineNumber: 93,
                 columnNumber: 7
+            }, this),
+            error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4",
+                role: "alert",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                        className: "font-bold",
+                        children: "Error!"
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/list-mun/page.tsx",
+                        lineNumber: 96,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "block sm:inline",
+                        children: [
+                            " ",
+                            error
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/list-mun/page.tsx",
+                        lineNumber: 97,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/list-mun/page.tsx",
+                lineNumber: 95,
+                columnNumber: 9
+            }, this),
+            success && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4",
+                role: "alert",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                        className: "font-bold",
+                        children: "Success!"
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/list-mun/page.tsx",
+                        lineNumber: 102,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "block sm:inline",
+                        children: [
+                            " ",
+                            success
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/list-mun/page.tsx",
+                        lineNumber: 103,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/list-mun/page.tsx",
+                lineNumber: 101,
+                columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                 onSubmit: handleSubmit,
@@ -487,7 +570,7 @@ function ListMUNPage() {
                                 children: "Event Name"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 65,
+                                lineNumber: 108,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -497,13 +580,13 @@ function ListMUNPage() {
                                 required: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 66,
+                                lineNumber: 109,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/list-mun/page.tsx",
-                        lineNumber: 64,
+                        lineNumber: 107,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -513,7 +596,7 @@ function ListMUNPage() {
                                 children: "Date"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 74,
+                                lineNumber: 117,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -524,13 +607,13 @@ function ListMUNPage() {
                                 required: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 75,
+                                lineNumber: 118,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/list-mun/page.tsx",
-                        lineNumber: 73,
+                        lineNumber: 116,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -540,7 +623,7 @@ function ListMUNPage() {
                                 children: "Venue"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 84,
+                                lineNumber: 127,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -550,13 +633,13 @@ function ListMUNPage() {
                                 required: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 85,
+                                lineNumber: 128,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/list-mun/page.tsx",
-                        lineNumber: 83,
+                        lineNumber: 126,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -566,24 +649,26 @@ function ListMUNPage() {
                                 children: "Registration Fees"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 93,
+                                lineNumber: 136,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
                                 id: "registrationFees",
                                 type: "number",
+                                step: "0.01",
+                                min: "0",
                                 value: registrationFees,
                                 onChange: (e)=>setRegistrationFees(e.target.value),
                                 required: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 94,
+                                lineNumber: 137,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/list-mun/page.tsx",
-                        lineNumber: 92,
+                        lineNumber: 135,
                         columnNumber: 9
                     }, this),
                     customFields.map((field)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -593,12 +678,12 @@ function ListMUNPage() {
                                         children: field.label
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/list-mun/page.tsx",
-                                        lineNumber: 106,
+                                        lineNumber: 151,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/list-mun/page.tsx",
-                                    lineNumber: 105,
+                                    lineNumber: 150,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -613,7 +698,7 @@ function ListMUNPage() {
                                                 placeholder: "Field Label"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                                lineNumber: 110,
+                                                lineNumber: 155,
                                                 columnNumber: 17
                                             }, this),
                                             (field.type === 'dropdown' || field.type === 'checkbox' || field.type === 'radio') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -622,7 +707,7 @@ function ListMUNPage() {
                                                         children: "Options"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/list-mun/page.tsx",
-                                                        lineNumber: 117,
+                                                        lineNumber: 162,
                                                         columnNumber: 21
                                                     }, this),
                                                     field.options?.map((option, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -639,7 +724,7 @@ function ListMUNPage() {
                                                             className: "mt-1"
                                                         }, index, false, {
                                                             fileName: "[project]/src/app/list-mun/page.tsx",
-                                                            lineNumber: 119,
+                                                            lineNumber: 164,
                                                             columnNumber: 23
                                                         }, this)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -654,13 +739,13 @@ function ListMUNPage() {
                                                         children: "Add Option"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/list-mun/page.tsx",
-                                                        lineNumber: 130,
+                                                        lineNumber: 175,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                                lineNumber: 116,
+                                                lineNumber: 161,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -670,24 +755,24 @@ function ListMUNPage() {
                                                 children: "Remove Field"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                                lineNumber: 139,
+                                                lineNumber: 184,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/list-mun/page.tsx",
-                                        lineNumber: 109,
+                                        lineNumber: 154,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/list-mun/page.tsx",
-                                    lineNumber: 108,
+                                    lineNumber: 153,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, field.id, true, {
                             fileName: "[project]/src/app/list-mun/page.tsx",
-                            lineNumber: 104,
+                            lineNumber: 149,
                             columnNumber: 11
                         }, this)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -696,7 +781,7 @@ function ListMUNPage() {
                                 children: "Add Custom Field"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 148,
+                                lineNumber: 193,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -707,12 +792,12 @@ function ListMUNPage() {
                                             placeholder: "Select field type"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/list-mun/page.tsx",
-                                            lineNumber: 151,
+                                            lineNumber: 196,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/list-mun/page.tsx",
-                                        lineNumber: 150,
+                                        lineNumber: 195,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -722,7 +807,7 @@ function ListMUNPage() {
                                                 children: "Text"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                                lineNumber: 154,
+                                                lineNumber: 199,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -730,7 +815,7 @@ function ListMUNPage() {
                                                 children: "Number"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                                lineNumber: 155,
+                                                lineNumber: 200,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -738,7 +823,7 @@ function ListMUNPage() {
                                                 children: "Dropdown"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                                lineNumber: 156,
+                                                lineNumber: 201,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -746,7 +831,7 @@ function ListMUNPage() {
                                                 children: "Checkbox"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                                lineNumber: 157,
+                                                lineNumber: 202,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -754,19 +839,19 @@ function ListMUNPage() {
                                                 children: "Radio"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                                lineNumber: 158,
+                                                lineNumber: 203,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/list-mun/page.tsx",
-                                        lineNumber: 153,
+                                        lineNumber: 198,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 149,
+                                lineNumber: 194,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -776,37 +861,38 @@ function ListMUNPage() {
                                 children: "Add Field"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/list-mun/page.tsx",
-                                lineNumber: 161,
+                                lineNumber: 206,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/list-mun/page.tsx",
-                        lineNumber: 147,
+                        lineNumber: 192,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                         type: "submit",
-                        children: "Submit MUN Listing"
+                        disabled: isSubmitting,
+                        children: isSubmitting ? 'Creating...' : 'Submit MUN Listing'
                     }, void 0, false, {
                         fileName: "[project]/src/app/list-mun/page.tsx",
-                        lineNumber: 166,
+                        lineNumber: 211,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/list-mun/page.tsx",
-                lineNumber: 63,
+                lineNumber: 106,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/list-mun/page.tsx",
-        lineNumber: 61,
+        lineNumber: 92,
         columnNumber: 5
     }, this);
 }
-_s(ListMUNPage, "h362jc4hF9ePAQCyOa0GA8ohTWQ=", false, function() {
+_s(ListMUNPage, "SYwc4HyHNylfgd+UgBqj++T2UIw=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];

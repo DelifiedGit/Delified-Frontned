@@ -219,7 +219,7 @@ function LoginPage() {
                 password
             });
             localStorage.setItem('auth_token', response.token);
-            router.push('/dashboard');
+            router.push('/');
         } catch (error) {
             setError('Login failed. Please check your credentials.');
         }
