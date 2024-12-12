@@ -76,7 +76,6 @@ export async function createMUN(munData: {
     throw new Error('No authentication token found');
   }
 
-  // Ensure registration_fees is a number
   const formattedData = {
     ...munData,
     registration_fees: Number(munData.registration_fees)
@@ -98,3 +97,24 @@ export async function createMUN(munData: {
 
   return response.json();
 }
+
+export async function fetchMUNs() {
+  const response = await fetch(`${API_BASE_URL}/muns/`);
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch MUNs');
+  }
+
+  return response.json();
+}
+
+export async function fetchMUNById(id: string) {
+  const response = await fetch(`${API_BASE_URL}/muns/${id}/`);
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch MUN details');
+  }
+
+  return response.json();
+}
+

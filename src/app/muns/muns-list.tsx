@@ -6,16 +6,15 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar, MapPin } from 'lucide-react'
+import { fetchMUNs } from '@/lib/api'
 
 interface MUN {
   id: string
-  title: string
+  event_name: string
   date: string
   venue: string
-  price: number
-  image: string
-  type: string
-  customFields?: { [key: string]: string | string[] }
+  registration_fees: number
+  custom_fields?: { [key: string]: string | string[] }
 }
 
 export default function MUNsList() {
@@ -24,24 +23,20 @@ export default function MUNsList() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchMUNs = async () => {
+    const loadMUNs = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch('/api/muns')
-        if (!response.ok) {
-          throw new Error('Failed to fetch MUNs')
-        }
-        const data = await response.json()
+        const data = await fetchMUNs()
         setMuns(data)
       } catch (error) {
-        console.error('Error fetching MUNs:', error)
+        console.log('Error fetching MUNs:', error)
         setError('Failed to load MUNs. Please try again later.')
       } finally {
         setIsLoading(false)
       }
     }
 
-    fetchMUNs()
+    loadMUNs()
   }, [])
 
   if (isLoading) {
@@ -57,13 +52,13 @@ export default function MUNsList() {
       {muns.map((mun) => (
         <Card key={mun.id} className="flex flex-col">
           <CardHeader>
-            <CardTitle>{mun.title}</CardTitle>
+            <CardTitle>{mun.event_name}</CardTitle>
           </CardHeader>
           <CardContent className="flex-grow">
             <div className="relative aspect-video mb-4">
               <Image
-                src={mun.image || '/placeholder.jpeg'}
-                alt={mun.title}
+                src={'/placeholder.jpeg'}
+                alt={mun.event_name}
                 fill
                 className="object-cover rounded-md"
               />
@@ -78,7 +73,7 @@ export default function MUNsList() {
                 <span>{mun.venue}</span>
               </div>
               <div>
-                <span className="font-bold">₹{mun.price}</span>
+                <span className="font-bold">₹{mun.registration_fees}</span>
               </div>
             </div>
           </CardContent>
@@ -92,3 +87,4 @@ export default function MUNsList() {
     </div>
   )
 }
+

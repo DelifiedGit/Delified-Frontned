@@ -265,6 +265,8 @@ var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_
 __turbopack_esm__({
     "createMUN": (()=>createMUN),
     "fetchDashboardData": (()=>fetchDashboardData),
+    "fetchMUNById": (()=>fetchMUNById),
+    "fetchMUNs": (()=>fetchMUNs),
     "login": (()=>login),
     "logout": (()=>logout),
     "signUp": (()=>signUp)
@@ -319,7 +321,6 @@ async function createMUN(munData) {
     if (!token) {
         throw new Error('No authentication token found');
     }
-    // Ensure registration_fees is a number
     const formattedData = {
         ...munData,
         registration_fees: Number(munData.registration_fees)
@@ -335,6 +336,20 @@ async function createMUN(munData) {
     if (!response.ok) {
         const errorData = await response.json().catch(()=>({}));
         throw new Error(`Failed to create MUN: ${JSON.stringify(errorData)}`);
+    }
+    return response.json();
+}
+async function fetchMUNs() {
+    const response = await fetch(`${API_BASE_URL}/muns/`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch MUNs');
+    }
+    return response.json();
+}
+async function fetchMUNById(id) {
+    const response = await fetch(`${API_BASE_URL}/muns/${id}/`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch MUN details');
     }
     return response.json();
 }

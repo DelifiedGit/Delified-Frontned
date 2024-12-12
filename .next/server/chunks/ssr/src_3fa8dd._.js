@@ -941,10 +941,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/image.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$mun$2d$registration$2d$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/mun-registration-form.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/card.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/lib/api.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/calendar.js [app-ssr] (ecmascript) <export default as Calendar>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/map-pin.js [app-ssr] (ecmascript) <export default as MapPin>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/users.js [app-ssr] (ecmascript) <export default as Users>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-ssr] (ecmascript) <export default as Clock>");
 'use client';
 ;
 ;
@@ -952,13 +951,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 ;
 ;
 ;
-const getMUNEvent = async (id)=>{
-    const response = await fetch(`/api/muns/${id}`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch MUN event');
-    }
-    return response.json();
-};
+;
 function MUNDetailContent({ id }) {
     const [munEvent, setMunEvent] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
@@ -967,10 +960,10 @@ function MUNDetailContent({ id }) {
         const fetchMUNEvent = async ()=>{
             try {
                 setIsLoading(true);
-                const event = await getMUNEvent(id);
+                const event = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchMUNById"])(id);
                 setMunEvent(event);
             } catch (error) {
-                console.error('Error fetching MUN event:', error);
+                console.log('Error fetching MUN event:', error);
                 setError('Failed to load MUN details. Please try again later.');
             } finally{
                 setIsLoading(false);
@@ -988,12 +981,12 @@ function MUNDetailContent({ id }) {
                 children: "Loading MUN details..."
             }, void 0, false, {
                 fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                lineNumber: 58,
+                lineNumber: 45,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-            lineNumber: 57,
+            lineNumber: 44,
             columnNumber: 7
         }, this);
     }
@@ -1005,12 +998,12 @@ function MUNDetailContent({ id }) {
                 children: error || 'MUN not found'
             }, void 0, false, {
                 fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                lineNumber: 66,
+                lineNumber: 53,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-            lineNumber: 65,
+            lineNumber: 52,
             columnNumber: 7
         }, this);
     }
@@ -1022,18 +1015,18 @@ function MUNDetailContent({ id }) {
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "relative aspect-video",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                        src: munEvent.image || '/placeholder.jpeg',
-                        alt: munEvent.title,
+                        src: '/placeholder.jpeg',
+                        alt: munEvent.event_name,
                         fill: true,
                         className: "object-cover"
                     }, void 0, false, {
                         fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                        lineNumber: 75,
+                        lineNumber: 62,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                    lineNumber: 74,
+                    lineNumber: 61,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1041,10 +1034,10 @@ function MUNDetailContent({ id }) {
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                             className: "text-3xl font-bold mb-4",
-                            children: munEvent.title
+                            children: munEvent.event_name
                         }, void 0, false, {
                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                            lineNumber: 83,
+                            lineNumber: 70,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1057,20 +1050,20 @@ function MUNDetailContent({ id }) {
                                             className: "w-5 h-5 text-gray-500"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 86,
+                                            lineNumber: 73,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: munEvent.date
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 87,
+                                            lineNumber: 74,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 85,
+                                    lineNumber: 72,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1080,201 +1073,29 @@ function MUNDetailContent({ id }) {
                                             className: "w-5 h-5 text-gray-500"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 90,
+                                            lineNumber: 77,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: munEvent.venue
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 91,
+                                            lineNumber: 78,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 89,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center gap-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
-                                            className: "w-5 h-5 text-gray-500"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 94,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: [
-                                                munEvent.type,
-                                                " event"
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 95,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 93,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center gap-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                            className: "w-5 h-5 text-gray-500"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 98,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: [
-                                                "Register by: ",
-                                                munEvent.registerBy
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 99,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 97,
+                                    lineNumber: 76,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                            lineNumber: 84,
+                            lineNumber: 71,
                             columnNumber: 11
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "mb-6",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    className: "text-2xl font-semibold mb-2",
-                                    children: "About the Event"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 103,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    children: munEvent.description
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 104,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                            lineNumber: 102,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "mb-6",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    className: "text-2xl font-semibold mb-2",
-                                    children: "Committees"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 107,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
-                                    className: "list-disc list-inside",
-                                    children: munEvent.committees.map((committee, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                            children: committee
-                                        }, index, false, {
-                                            fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 110,
-                                            columnNumber: 17
-                                        }, this))
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 108,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                            lineNumber: 106,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "mb-6",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    className: "text-2xl font-semibold mb-2",
-                                    children: "Schedule"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 115,
-                                    columnNumber: 13
-                                }, this),
-                                munEvent.schedule.map((day, dayIndex)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "mb-4",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                className: "text-xl font-semibold mb-2",
-                                                children: day.day
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                                lineNumber: 118,
-                                                columnNumber: 17
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
-                                                className: "space-y-2",
-                                                children: day.events.map((event, eventIndex)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
-                                                        className: "flex",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "font-medium w-40",
-                                                                children: event.time
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                                                lineNumber: 122,
-                                                                columnNumber: 23
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                children: event.event
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                                                lineNumber: 123,
-                                                                columnNumber: 23
-                                                            }, this)
-                                                        ]
-                                                    }, eventIndex, true, {
-                                                        fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                                        lineNumber: 121,
-                                                        columnNumber: 21
-                                                    }, this))
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                                lineNumber: 119,
-                                                columnNumber: 17
-                                            }, this)
-                                        ]
-                                    }, dayIndex, true, {
-                                        fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                        lineNumber: 117,
-                                        columnNumber: 15
-                                    }, this))
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                            lineNumber: 114,
-                            columnNumber: 11
-                        }, this),
-                        munEvent.customFields && Object.keys(munEvent.customFields).length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+                        munEvent.custom_fields && Object.keys(munEvent.custom_fields).length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
                             className: "mb-6",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardHeader"], {
@@ -1282,16 +1103,16 @@ function MUNDetailContent({ id }) {
                                         children: "Additional Information"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                        lineNumber: 133,
+                                        lineNumber: 84,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 132,
+                                    lineNumber: 83,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
-                                    children: Object.entries(munEvent.customFields).map(([key, value])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: Object.entries(munEvent.custom_fields).map(([key, value])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "mb-2",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
@@ -1301,7 +1122,7 @@ function MUNDetailContent({ id }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                                    lineNumber: 138,
+                                                    lineNumber: 89,
                                                     columnNumber: 21
                                                 }, this),
                                                 " ",
@@ -1309,18 +1130,18 @@ function MUNDetailContent({ id }) {
                                             ]
                                         }, key, true, {
                                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                            lineNumber: 137,
+                                            lineNumber: 88,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 86,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                            lineNumber: 131,
+                            lineNumber: 82,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1330,44 +1151,44 @@ function MUNDetailContent({ id }) {
                                     className: "text-3xl font-bold text-[#4763FF]",
                                     children: [
                                         "₹",
-                                        munEvent.price
+                                        munEvent.registration_fees
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 145,
+                                    lineNumber: 96,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$mun$2d$registration$2d$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MunRegistrationForm"], {
-                                    munTitle: munEvent.title,
+                                    munTitle: munEvent.event_name,
                                     munId: munEvent.id,
-                                    price: munEvent.price,
-                                    customFields: munEvent.customFields
+                                    price: munEvent.registration_fees,
+                                    customFields: munEvent.custom_fields
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                                    lineNumber: 146,
+                                    lineNumber: 97,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                            lineNumber: 144,
+                            lineNumber: 95,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-                    lineNumber: 82,
+                    lineNumber: 69,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-            lineNumber: 73,
+            lineNumber: 60,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/muns/[id]/mun-detail-content.tsx",
-        lineNumber: 72,
+        lineNumber: 59,
         columnNumber: 5
     }, this);
 }

@@ -95,9 +95,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/image.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/button.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/card.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/lib/api.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/calendar.js [app-ssr] (ecmascript) <export default as Calendar>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/map-pin.js [app-ssr] (ecmascript) <export default as MapPin>");
 'use client';
+;
 ;
 ;
 ;
@@ -110,23 +112,19 @@ function MUNsList() {
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        const fetchMUNs = async ()=>{
+        const loadMUNs = async ()=>{
             try {
                 setIsLoading(true);
-                const response = await fetch('/api/muns');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch MUNs');
-                }
-                const data = await response.json();
+                const data = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchMUNs"])();
                 setMuns(data);
             } catch (error) {
-                console.error('Error fetching MUNs:', error);
+                console.log('Error fetching MUNs:', error);
                 setError('Failed to load MUNs. Please try again later.');
             } finally{
                 setIsLoading(false);
             }
         };
-        fetchMUNs();
+        loadMUNs();
     }, []);
     if (isLoading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -134,7 +132,7 @@ function MUNsList() {
             children: "Loading MUNs..."
         }, void 0, false, {
             fileName: "[project]/src/app/muns/muns-list.tsx",
-            lineNumber: 48,
+            lineNumber: 43,
             columnNumber: 12
         }, this);
     }
@@ -144,7 +142,7 @@ function MUNsList() {
             children: error
         }, void 0, false, {
             fileName: "[project]/src/app/muns/muns-list.tsx",
-            lineNumber: 52,
+            lineNumber: 47,
             columnNumber: 12
         }, this);
     }
@@ -155,15 +153,15 @@ function MUNsList() {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardHeader"], {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardTitle"], {
-                            children: mun.title
+                            children: mun.event_name
                         }, void 0, false, {
                             fileName: "[project]/src/app/muns/muns-list.tsx",
-                            lineNumber: 60,
+                            lineNumber: 55,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/muns/muns-list.tsx",
-                        lineNumber: 59,
+                        lineNumber: 54,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -172,18 +170,18 @@ function MUNsList() {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "relative aspect-video mb-4",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                    src: mun.image || '/placeholder.jpeg',
-                                    alt: mun.title,
+                                    src: '/placeholder.jpeg',
+                                    alt: mun.event_name,
                                     fill: true,
                                     className: "object-cover rounded-md"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/muns/muns-list.tsx",
-                                    lineNumber: 64,
+                                    lineNumber: 59,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/muns/muns-list.tsx",
-                                lineNumber: 63,
+                                lineNumber: 58,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -196,20 +194,20 @@ function MUNsList() {
                                                 className: "w-4 h-4 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/muns/muns-list.tsx",
-                                                lineNumber: 73,
+                                                lineNumber: 68,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: mun.date
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/muns/muns-list.tsx",
-                                                lineNumber: 74,
+                                                lineNumber: 69,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/muns/muns-list.tsx",
-                                        lineNumber: 72,
+                                        lineNumber: 67,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -219,20 +217,20 @@ function MUNsList() {
                                                 className: "w-4 h-4 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/muns/muns-list.tsx",
-                                                lineNumber: 77,
+                                                lineNumber: 72,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: mun.venue
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/muns/muns-list.tsx",
-                                                lineNumber: 78,
+                                                lineNumber: 73,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/muns/muns-list.tsx",
-                                        lineNumber: 76,
+                                        lineNumber: 71,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -240,28 +238,28 @@ function MUNsList() {
                                             className: "font-bold",
                                             children: [
                                                 "₹",
-                                                mun.price
+                                                mun.registration_fees
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/muns/muns-list.tsx",
-                                            lineNumber: 81,
+                                            lineNumber: 76,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/muns/muns-list.tsx",
-                                        lineNumber: 80,
+                                        lineNumber: 75,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/muns/muns-list.tsx",
-                                lineNumber: 71,
+                                lineNumber: 66,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/muns/muns-list.tsx",
-                        lineNumber: 62,
+                        lineNumber: 57,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardFooter"], {
@@ -273,28 +271,28 @@ function MUNsList() {
                                 children: "View Details"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/muns/muns-list.tsx",
-                                lineNumber: 87,
+                                lineNumber: 82,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/muns/muns-list.tsx",
-                            lineNumber: 86,
+                            lineNumber: 81,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/muns/muns-list.tsx",
-                        lineNumber: 85,
+                        lineNumber: 80,
                         columnNumber: 11
                     }, this)
                 ]
             }, mun.id, true, {
                 fileName: "[project]/src/app/muns/muns-list.tsx",
-                lineNumber: 58,
+                lineNumber: 53,
                 columnNumber: 9
             }, this))
     }, void 0, false, {
         fileName: "[project]/src/app/muns/muns-list.tsx",
-        lineNumber: 56,
+        lineNumber: 51,
         columnNumber: 5
     }, this);
 }
