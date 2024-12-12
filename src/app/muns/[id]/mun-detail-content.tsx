@@ -7,13 +7,19 @@ import { MunRegistrationForm } from '@/components/mun-registration-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchMUNById } from '@/lib/api'
 
+interface CustomField {
+  type: 'text' | 'number' | 'dropdown'
+  value?: string | number
+  options?: string[]
+}
+
 interface MUNEvent {
   id: string
   event_name: string
   date: string
   venue: string
   registration_fees: number
-  custom_fields?: { [key: string]: string | string[] }
+  custom_fields?: { [key: string]: CustomField }
 }
 
 export default function MUNDetailContent({ id }: { id: string }) {
@@ -26,7 +32,6 @@ export default function MUNDetailContent({ id }: { id: string }) {
       try {
         setIsLoading(true)
         const event = await fetchMUNById(id)
-        console.log(event)
         setMunEvent(event)
       } catch (error) {
         console.log('Error fetching MUN event:', error)
@@ -84,9 +89,14 @@ export default function MUNDetailContent({ id }: { id: string }) {
                 <CardTitle>Additional Information</CardTitle>
               </CardHeader>
               <CardContent>
-                {Object.entries(munEvent.custom_fields).map(([key, value]) => (
+                {Object.entries(munEvent.custom_fields).map(([key, field]) => (
                   <div key={key} className="mb-2">
-                    <strong>{key}:</strong> {Array.isArray(value) ? value.join(', ') : String(value)}
+                    <strong>{key}:</strong>{' '}
+                    {field.type === 'dropdown' ? (
+                      <span>{field.options?.join(', ') || ''}</span>
+                    ) : (
+                      <span>{field.value || ''}</span>
+                    )}
                   </div>
                 ))}
               </CardContent>

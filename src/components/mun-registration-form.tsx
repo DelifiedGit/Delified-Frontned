@@ -17,11 +17,17 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 
+interface CustomField {
+  type: 'text' | 'number' | 'dropdown'
+  value?: string | number
+  options?: string[]
+}
+
 interface RegistrationFormProps {
   munTitle: string
   munId: string
   price: number
-  customFields?: { [key: string]: string | string[] }
+  customFields?: { [key: string]: CustomField }
 }
 
 export function MunRegistrationForm({ munTitle, munId, price, customFields }: RegistrationFormProps) {
@@ -88,21 +94,21 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
           {customFields && Object.entries(customFields).map(([key, field]) => (
             <div key={key}>
               <Label htmlFor={key}>{key}</Label>
-              {Array.isArray(field) ? (
-                field.length > 3 ? (
+              {field.type === 'dropdown' && field.options ? (
+                field.options.length > 3 ? (
                   <Select onValueChange={(value) => handleInputChange(key, value)}>
                     <SelectTrigger>
                       <SelectValue placeholder={`Select ${key}`} />
                     </SelectTrigger>
                     <SelectContent>
-                      {field.map((option, index) => (
+                      {field.options.map((option, index) => (
                         <SelectItem key={index} value={option}>{option}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                ) : field.length > 1 ? (
+                ) : field.options.length > 1 ? (
                   <div className="space-y-2">
-                    {field.map((option, index) => (
+                    {field.options.map((option, index) => (
                       <div key={index} className="flex items-center space-x-2">
                         <Checkbox
                           id={`${key}-${index}`}
@@ -115,7 +121,7 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
                   </div>
                 ) : (
                   <RadioGroup onValueChange={(value) => handleInputChange(key, value)}>
-                    {field.map((option, index) => (
+                    {field.options.map((option, index) => (
                       <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={option} id={`${key}-${index}`} />
                         <Label htmlFor={`${key}-${index}`}>{option}</Label>
@@ -126,6 +132,7 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
               ) : (
                 <Input
                   id={key}
+                  type={field.type === 'number' ? 'number' : 'text'}
                   value={formData[key] as string}
                   onChange={(e) => handleInputChange(key, e.target.value)}
                   required
@@ -161,3 +168,4 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
     </Dialog>
   )
 }
+
