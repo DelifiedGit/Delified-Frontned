@@ -68,6 +68,7 @@ export async function createMUN(munData: {
   event_name: string;
   date: string;
   venue: string;
+  description: string;
   registration_fees: number;
   custom_fields: Record<string, any>;
 }) {

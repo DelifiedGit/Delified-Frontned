@@ -22,6 +22,7 @@ export default function ListMUNPage() {
   const [eventName, setEventName] = useState('')
   const [date, setDate] = useState('')
   const [venue, setVenue] = useState('')
+  const [description, setDescription] = useState('')
   const [registrationFees, setRegistrationFees] = useState('')
   const [customFields, setCustomFields] = useState<CustomField[]>([])
   const [newFieldType, setNewFieldType] = useState<FieldType>('text')
@@ -71,6 +72,7 @@ export default function ListMUNPage() {
         event_name: eventName,
         date,
         venue,
+        description,
         registration_fees: Number(registrationFees),
         custom_fields: formatCustomFieldsForAPI(customFields)
       }
@@ -129,6 +131,15 @@ export default function ListMUNPage() {
             id="venue"
             value={venue}
             onChange={(e) => setVenue(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="description">Description</Label>
+          <Input
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
