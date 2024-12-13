@@ -432,7 +432,7 @@ function CheckoutPage({ params }) {
         const fetchMUNEvent = async ()=>{
             try {
                 setIsLoading(true);
-                const response = await fetch(`/api/muns/${params.id}`);
+                const response = await fetch(`/api/muns/${params.id}/`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch MUN event');
                 }

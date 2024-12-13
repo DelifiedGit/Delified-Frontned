@@ -18,6 +18,7 @@ interface MUNEvent {
   event_name: string
   date: string
   venue: string
+  description: string
   registration_fees: number
   custom_fields?: { [key: string]: CustomField }
 }
@@ -83,10 +84,10 @@ export default function MUNDetailContent({ id }: { id: string }) {
               <span>{munEvent.venue}</span>
             </div>
           </div>
-          {munEvent.custom_fields && Object.keys(munEvent.custom_fields).length > 0 && (
+          {munEvent.custom_fields && Object.keys(munEvent.custom_fields).length >= 0 && (
             <Card className="mb-6">
               <CardHeader>
-                <CardTitle>Additional Information</CardTitle>
+                <CardTitle>Description</CardTitle>
               </CardHeader>
               <CardContent>
                 {Object.entries(munEvent.custom_fields).map(([key, field]) => (
@@ -99,16 +100,19 @@ export default function MUNDetailContent({ id }: { id: string }) {
                     )}
                   </div>
                 ))}
+                <div className="flex items-center gap-2">
+                  <span>{munEvent.description}</span>
+                </div>
               </CardContent>
             </Card>
           )}
           <div className="flex items-center justify-between">
             <span className="text-3xl font-bold text-[#4763FF]">₹{munEvent.registration_fees}</span>
-            <MunRegistrationForm 
-              munTitle={munEvent.event_name} 
-              munId={munEvent.id} 
-              price={munEvent.registration_fees} 
-              customFields={munEvent.custom_fields || {}} 
+            <MunRegistrationForm
+              munTitle={munEvent.event_name}
+              munId={munEvent.id}
+              price={munEvent.registration_fees}
+              customFields={munEvent.custom_fields || {}}
             />
           </div>
         </div>
