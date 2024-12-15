@@ -4,5 +4,8 @@
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/dash/page": "app/dash/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/muns/page": "app/muns/page.js"
+  "/muns/page": "app/muns/page.js",
+  "/mun-guide/page": "app/mun-guide/page.js",
+  "/muns/[id]/page": "app/muns/[id]/page.js",
+  "/muns/[id]/checkout/page": "app/muns/[id]/checkout/page.js"
 }

@@ -16,6 +16,7 @@ interface MUNEvent {
   event_name: string
   price: number
   customFields?: { [key: string]: string | string[] }
+  registration_fees: string
 }
 
 interface CheckoutProps {
@@ -151,7 +152,7 @@ export default function CheckoutPage({ params }: CheckoutProps) {
           </CardContent>
           <CardFooter>
             <div className="w-full flex justify-between items-center">
-              <span className="text-2xl font-bold">Total: ₹{munEvent.price}</span>
+              <span className="text-2xl font-bold">Total: ₹{munEvent.registration_fees}</span>
               <Button type="submit">Complete Registration</Button>
             </div>
           </CardFooter>

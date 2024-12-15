@@ -19,7 +19,7 @@ interface MUN {
 }
 
 interface UserProfile {
-  name: string
+  full_name: string
   email: string
   institution: string
 }
@@ -82,7 +82,7 @@ export default function DashboardPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Welcome, {dashboardData.user.name}</h1>
+        <h1 className="text-3xl font-bold">Welcome, {dashboardData.user.full_name}</h1>
         <Button onClick={handleLogout}>Logout</Button>
       </div>
 
@@ -92,7 +92,7 @@ export default function DashboardPage() {
             <CardTitle>Profile</CardTitle>
           </CardHeader>
           <CardContent>
-            <p><strong>Name:</strong> {dashboardData.user.name}</p>
+            <p><strong>Name:</strong> {dashboardData.user.full_name}</p>
             <p><strong>Email:</strong> {dashboardData.user.email}</p>
             <p><strong>Institution:</strong> {dashboardData.user.institution}</p>
           </CardContent>
