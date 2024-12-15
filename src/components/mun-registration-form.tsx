@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { createRegistration } from '@/lib/api'
+import { processPayment } from '@/lib/api'
 
 interface CustomField {
   type: 'text' | 'number' | 'dropdown'
@@ -56,22 +56,17 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
     e.preventDefault()
     setError(null)
     try {
-      const registration = await createRegistration({
-        mun: munId,
-        custom_fields: {
-          ...formData,
-          name: formData.name,
-          email: formData.email,
-        },
+      const payment = await processPayment({
+        munId,
+        amount: price,
       })
       
-      console.log('Registration successful:', registration)
+      console.log('Payment successful:', payment)
       setIsOpen(false)
-      router.push('/')
-      router.push(`/muns/${munId}/checkout?registrationId=${registration.id}`)
+      router.push(`/muns/${munId}/checkout?paymentId=${payment.payment_id}&formData=${encodeURIComponent(JSON.stringify(formData))}`)
     } catch (error) {
-      console.error('Error registering for MUN:', error)
-      setError('Registration failed. Please try again.')
+      console.error('Error processing payment:', error)
+      setError('Payment failed. Please try again.')
     }
   }
 

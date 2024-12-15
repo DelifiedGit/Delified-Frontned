@@ -37,7 +37,9 @@ export default function DashboardPage() {
     const fetchDashboardData = async () => {
       try {
         const token = localStorage.getItem('auth_token')
+        console.log('dashboard login')
         if (!token) {
+          console.log("dashboard login")
           router.push('/login')
           return
         }

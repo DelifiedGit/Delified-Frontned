@@ -119,17 +119,40 @@ export async function fetchMUNById(id: string) {
   return response.json();
 }
 
-export async function createRegistration(registrationData: {
-  mun: string
-  custom_fields: Record<string, any>;
+export async function processPayment(paymentData: {
+  munId: string;
+  amount: number;
 }) {
   const token = localStorage.getItem('auth_token');
   if (!token) {
     throw new Error('No authentication token found');
   }
 
-  console.log(registrationData)
-  console.log(token)
+  const response = await fetch(`${API_BASE_URL}/payments/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${token}`,
+    },
+    body: JSON.stringify(paymentData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to process payment');
+  }
+
+  return response.json();
+}
+
+export async function createRegistration(registrationData: {
+  mun: string;
+  payment_id: string;
+  custom_fields: Record<string, any>;
+}) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
 
   const response = await fetch(`${API_BASE_URL}/registrations/`, {
     method: 'POST',
@@ -148,8 +171,6 @@ export async function createRegistration(registrationData: {
   return response.json();
 }
 
-
-
 export async function fetchRegistrationById(id: string) {
   const token = localStorage.getItem('auth_token');
   if (!token) {
@@ -164,31 +185,6 @@ export async function fetchRegistrationById(id: string) {
   
   if (!response.ok) {
     throw new Error('Failed to fetch registration details');
-  }
-
-  return response.json();
-}
-
-export async function processPayment(paymentData: {
-  registrationId: string;
-  // Add other payment details as needed
-}) {
-  const token = localStorage.getItem('auth_token');
-  if (!token) {
-    throw new Error('No authentication token found');
-  }
-
-  const response = await fetch(`${API_BASE_URL}/payments/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Token ${token}`,
-    },
-    body: JSON.stringify(paymentData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to process payment');
   }
 
   return response.json();

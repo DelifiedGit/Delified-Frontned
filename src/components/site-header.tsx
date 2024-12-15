@@ -20,7 +20,9 @@ export function SiteHeader() {
 
   useEffect(() => {
     const token = localStorage.getItem('auth_token')
+    console.log(token)
     setIsLoggedIn(!!token)
+    console.log('login value '+isLoggedIn)
   }, [])
 
   const handleLogout = async () => {

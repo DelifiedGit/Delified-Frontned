@@ -4,5 +4,8 @@
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
   "/muns/[id]/page": "app/muns/[id]/page.js",
-  "/muns/[id]/checkout/page": "app/muns/[id]/checkout/page.js"
+  "/muns/[id]/checkout/page": "app/muns/[id]/checkout/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/mun-guide/page": "app/mun-guide/page.js",
+  "/muns/[id]/confirmation/page": "app/muns/[id]/confirmation/page.js"
 }
