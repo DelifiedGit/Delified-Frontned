@@ -85,7 +85,7 @@ export function SiteHeader() {
               <Link href="/muns" className="text-sm hover:text-[#E03D8D] transition-colors">MUNs</Link>
               <Link href="/mun-guide" className="text-sm hover:text-[#E03D8D] transition-colors">MUN Guide</Link>           
               {isLoggedIn && (
-                <Link href="/dashboard" className="text-sm hover:text-[#E03D8D] transition-colors">Dashboard</Link>
+                <Link href="/dash" className="text-sm hover:text-[#E03D8D] transition-colors">Dashboard</Link>
               )}
             </nav>
 
