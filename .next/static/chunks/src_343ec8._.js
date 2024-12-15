@@ -581,9 +581,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$s
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$checkbox$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/checkbox.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$radio$2d$group$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/radio-group.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/ui/dialog.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/lib/api.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_refresh__.signature();
 'use client';
+;
 ;
 ;
 ;
@@ -597,6 +599,7 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
     _s();
     const [isOpen, setIsOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
+    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const handleInputChange = (key, value)=>{
         setFormData((prev)=>({
@@ -625,27 +628,23 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
     };
     const handleSubmit = async (e)=>{
         e.preventDefault();
+        setError(null);
         try {
-            const response = await fetch('/api/muns/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    munId,
-                    ...formData
-                })
+            const registration = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createRegistration"])({
+                mun: munId,
+                custom_fields: {
+                    ...formData,
+                    name: formData.name,
+                    email: formData.email
+                }
             });
-            if (!response.ok) {
-                throw new Error('Failed to register for MUN');
-            }
-            const registration = await response.json();
             console.log('Registration successful:', registration);
             setIsOpen(false);
-            router.push(`/muns/${munId}/checkout`);
+            router.push('/');
+            router.push(`/muns/${munId}/checkout?registrationId=${registration.id}`);
         } catch (error) {
             console.error('Error registering for MUN:', error);
-        // TODO: Show error message to user
+            setError('Registration failed. Please try again.');
         }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -658,12 +657,12 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                     children: "Register Now"
                 }, void 0, false, {
                     fileName: "[project]/src/components/mun-registration-form.tsx",
-                    lineNumber: 84,
+                    lineNumber: 81,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/mun-registration-form.tsx",
-                lineNumber: 83,
+                lineNumber: 80,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogContent"], {
@@ -678,20 +677,20 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/mun-registration-form.tsx",
-                                lineNumber: 88,
+                                lineNumber: 85,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogDescription"], {
                                 children: "Fill out the form below to register for this MUN."
                             }, void 0, false, {
                                 fileName: "[project]/src/components/mun-registration-form.tsx",
-                                lineNumber: 89,
+                                lineNumber: 86,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                        lineNumber: 87,
+                        lineNumber: 84,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -705,7 +704,7 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                             children: key
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                            lineNumber: 96,
+                                            lineNumber: 93,
                                             columnNumber: 15
                                         }, this),
                                         field.type === 'dropdown' && field.options ? field.options.length > 3 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -716,12 +715,12 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                                         placeholder: `Select ${key}`
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                        lineNumber: 101,
+                                                        lineNumber: 98,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                    lineNumber: 100,
+                                                    lineNumber: 97,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -730,18 +729,18 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                                             children: option
                                                         }, index, false, {
                                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                            lineNumber: 105,
+                                                            lineNumber: 102,
                                                             columnNumber: 25
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                    lineNumber: 103,
+                                                    lineNumber: 100,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                            lineNumber: 99,
+                                            lineNumber: 96,
                                             columnNumber: 19
                                         }, this) : field.options.length > 1 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "space-y-2",
@@ -754,7 +753,7 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                                             onCheckedChange: (checked)=>handleCheckboxChange(key, option, checked)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                            lineNumber: 113,
+                                                            lineNumber: 110,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -762,18 +761,18 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                                             children: option
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                            lineNumber: 118,
+                                                            lineNumber: 115,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, index, true, {
                                                     fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                    lineNumber: 112,
+                                                    lineNumber: 109,
                                                     columnNumber: 23
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                            lineNumber: 110,
+                                            lineNumber: 107,
                                             columnNumber: 19
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$radio$2d$group$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RadioGroup"], {
                                             onValueChange: (value)=>handleInputChange(key, value),
@@ -785,7 +784,7 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                                             id: `${key}-${index}`
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                            lineNumber: 126,
+                                                            lineNumber: 123,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -793,18 +792,18 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                                             children: option
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                            lineNumber: 127,
+                                                            lineNumber: 124,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, index, true, {
                                                     fileName: "[project]/src/components/mun-registration-form.tsx",
-                                                    lineNumber: 125,
+                                                    lineNumber: 122,
                                                     columnNumber: 23
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                            lineNumber: 123,
+                                            lineNumber: 120,
                                             columnNumber: 19
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
                                             id: key,
@@ -814,13 +813,13 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/mun-registration-form.tsx",
-                                            lineNumber: 133,
+                                            lineNumber: 130,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, key, true, {
                                     fileName: "[project]/src/components/mun-registration-form.tsx",
-                                    lineNumber: 95,
+                                    lineNumber: 92,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -830,7 +829,7 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                         children: "Full Name"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                                        lineNumber: 144,
+                                        lineNumber: 141,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -840,13 +839,13 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                                        lineNumber: 145,
+                                        lineNumber: 142,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/mun-registration-form.tsx",
-                                lineNumber: 143,
+                                lineNumber: 140,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -856,7 +855,7 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                         children: "Email"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                                        lineNumber: 153,
+                                        lineNumber: 150,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -867,14 +866,22 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                                        lineNumber: 154,
+                                        lineNumber: 151,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/mun-registration-form.tsx",
-                                lineNumber: 152,
+                                lineNumber: 149,
                                 columnNumber: 11
+                            }, this),
+                            error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "text-red-500",
+                                children: error
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/mun-registration-form.tsx",
+                                lineNumber: 159,
+                                columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex justify-between items-center",
@@ -886,7 +893,7 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                                        lineNumber: 163,
+                                        lineNumber: 161,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -894,35 +901,35 @@ function MunRegistrationForm({ munTitle, munId, price, customFields }) {
                                         children: "Proceed to Checkout"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                                        lineNumber: 164,
+                                        lineNumber: 162,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/mun-registration-form.tsx",
-                                lineNumber: 162,
+                                lineNumber: 160,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/mun-registration-form.tsx",
-                        lineNumber: 93,
+                        lineNumber: 90,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/mun-registration-form.tsx",
-                lineNumber: 86,
+                lineNumber: 83,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/mun-registration-form.tsx",
-        lineNumber: 82,
+        lineNumber: 79,
         columnNumber: 5
     }, this);
 }
-_s(MunRegistrationForm, "UdRlyqW8wgssO8D7sCQqcndabXw=", false, function() {
+_s(MunRegistrationForm, "cLi5iiNMeQoj4OJPU63v7Aokf2g=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];

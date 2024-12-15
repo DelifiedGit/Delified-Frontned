@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { createRegistration } from '@/lib/api'
 
 interface CustomField {
   type: 'text' | 'number' | 'dropdown'
@@ -33,6 +34,7 @@ interface RegistrationFormProps {
 export function MunRegistrationForm({ munTitle, munId, price, customFields }: RegistrationFormProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [formData, setFormData] = useState<{ [key: string]: string | string[] }>({})
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   const handleInputChange = (key: string, value: string | string[]) => {
@@ -52,29 +54,24 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
     try {
-      const response = await fetch('/api/muns/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          munId,
+      const registration = await createRegistration({
+        mun: munId,
+        custom_fields: {
           ...formData,
-        }),
+          name: formData.name,
+          email: formData.email,
+        },
       })
-
-      if (!response.ok) {
-        throw new Error('Failed to register for MUN')
-      }
-
-      const registration = await response.json()
+      
       console.log('Registration successful:', registration)
       setIsOpen(false)
-      router.push(`/muns/${munId}/checkout`)
+      router.push('/')
+      router.push(`/muns/${munId}/checkout?registrationId=${registration.id}`)
     } catch (error) {
       console.error('Error registering for MUN:', error)
-      // TODO: Show error message to user
+      setError('Registration failed. Please try again.')
     }
   }
 
@@ -159,6 +156,7 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
               required
             />
           </div>
+          {error && <div className="text-red-500">{error}</div>}
           <div className="flex justify-between items-center">
             <span>Price: ₹{price}</span>
             <Button type="submit">Proceed to Checkout</Button>

@@ -1,12 +1,8 @@
 {
-  "/page": "app/page.js",
+  "/muns/page": "app/muns/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/login/page": "app/login/page.js",
-  "/signup/page": "app/signup/page.js",
-  "/muns/page": "app/muns/page.js",
-  "/list-mun/page": "app/list-mun/page.js",
+  "/page": "app/page.js",
   "/muns/[id]/page": "app/muns/[id]/page.js",
-  "/mun-guide/page": "app/mun-guide/page.js",
-  "/api/muns/register/route": "app/api/muns/register/route.js",
   "/muns/[id]/checkout/page": "app/muns/[id]/checkout/page.js"
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -9,54 +9,54 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { fetchMUNById, fetchRegistrationById, processPayment } from '@/lib/api'
+
+interface MUNEvent {
+  id: string
+  event_name: string
+  price: number
+  customFields?: { [key: string]: string | string[] }
+}
 
 interface CheckoutProps {
   params: { id: string }
 }
 
-interface MUNEvent {
-  id: string
-  title: string
-  price: number
-  customFields?: { [key: string]: string | string[] }
-}
-
 export default function CheckoutPage({ params }: CheckoutProps) {
   const [munEvent, setMunEvent] = useState<MUNEvent | null>(null)
+  const [registration, setRegistration] = useState<any>(null)
   const [formData, setFormData] = useState<{ [key: string]: string | string[] }>({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
-  const [state, setState] = useState(false);
+  const searchParams = useSearchParams()
+  const registrationId = searchParams.get('registrationId')
 
   useEffect(() => {
-    const fetchMUNEvent = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch(`/api/muns/${params.id}`)
-        if (!response.ok) {
-          throw new Error('Failed to fetch MUN event')
+        if (!registrationId) {
+          throw new Error('Registration ID is missing')
         }
-        const data = await response.json()
-        setMunEvent(data)
-        // Initialize form data with custom fields
-        if (data.customFields) {
-          const initialFormData: { [key: string]: string | string[] } = {}
-          Object.keys(data.customFields).forEach(key => {
-            initialFormData[key] = Array.isArray(data.customFields[key]) ? [] : ''
-          })
-          setFormData(initialFormData)
-        }
+        const [munData, registrationData] = await Promise.all([
+          fetchMUNById(params.id),
+          fetchRegistrationById(registrationId)
+        ])
+        
+        setMunEvent(munData)
+        setRegistration(registrationData)
+        setFormData(registrationData.custom_fields || {})
       } catch (error) {
-        console.error('Error fetching MUN event:', error)
-        setError('Failed to load MUN details. Please try again later.')
+        console.error('Error fetching data:', error)
+        setError('Failed to load checkout details. Please try again later.')
       } finally {
         setIsLoading(false)
       }
     }
 
-    fetchMUNEvent()
-  }, [params.id])
+    fetchData()
+  }, [params.id, registrationId])
 
   const handleInputChange = (key: string, value: string | string[]) => {
     setFormData(prev => ({ ...prev, [key]: value }))
@@ -65,32 +65,20 @@ export default function CheckoutPage({ params }: CheckoutProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await fetch('/api/muns/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          munId: params.id,
-          ...formData,
-        }),
+      const paymentResult = await processPayment({
+        registrationId: registration.id,
+        ...formData,
       })
-
-      if (!response.ok) {
-        throw new Error('Checkout failed')
-      }
-
-      const checkoutResult = await response.json()
-      console.log('Checkout successful:', checkoutResult)
-      router.push(`/muns/${params.id}/confirmation`)
+      console.log('Payment successful:', paymentResult)
+      router.push(`/muns/${params.id}/confirmation?paymentId=${paymentResult.id}`)
     } catch (error) {
-      console.error('Error during checkout:', error)
-      setError('Checkout failed. Please try again.')
+      console.error('Error during payment:', error)
+      setError('Payment failed. Please try again.')
     }
   }
 
   if (isLoading) {
-    return <div className="text-center py-10">Loading checkout...</div>
+    return <div className="text-center py-10">Loading checkout details...</div>
   }
 
   if (error || !munEvent) {
@@ -99,7 +87,7 @@ export default function CheckoutPage({ params }: CheckoutProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Checkout for {munEvent.title}</h1>
+      <h1 className="text-3xl font-bold mb-6">Checkout for {munEvent.event_name}</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
           <CardHeader>
@@ -148,7 +136,6 @@ export default function CheckoutPage({ params }: CheckoutProps) {
             <CardTitle>Payment Details</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* Add payment form fields here */}
             <div className="mb-4">
               <Label htmlFor="cardNumber">Card Number</Label>
               <Input id="cardNumber" placeholder="1234 5678 9012 3456" required />
@@ -175,3 +162,4 @@ export default function CheckoutPage({ params }: CheckoutProps) {
     </div>
   )
 }
+

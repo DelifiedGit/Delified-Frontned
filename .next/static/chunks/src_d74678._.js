@@ -261,11 +261,14 @@ var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_
 {
 __turbopack_esm__({
     "createMUN": (()=>createMUN),
+    "createRegistration": (()=>createRegistration),
     "fetchDashboardData": (()=>fetchDashboardData),
     "fetchMUNById": (()=>fetchMUNById),
     "fetchMUNs": (()=>fetchMUNs),
+    "fetchRegistrationById": (()=>fetchRegistrationById),
     "login": (()=>login),
     "logout": (()=>logout),
+    "processPayment": (()=>processPayment),
     "signUp": (()=>signUp)
 });
 const API_BASE_URL = 'http://localhost:8000/api';
@@ -348,6 +351,60 @@ async function fetchMUNById(id) {
     console.log(response);
     if (!response.ok) {
         throw new Error('Failed to fetch MUN details');
+    }
+    return response.json();
+}
+async function createRegistration(registrationData) {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+    console.log(registrationData);
+    console.log(token);
+    const response = await fetch(`${API_BASE_URL}/registrations/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
+        },
+        body: JSON.stringify(registrationData)
+    });
+    if (!response.ok) {
+        const errorData = await response.json().catch(()=>({}));
+        throw new Error(`Failed to create registration: ${JSON.stringify(errorData)}`);
+    }
+    return response.json();
+}
+async function fetchRegistrationById(id) {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+    const response = await fetch(`${API_BASE_URL}/registrations/${id}/`, {
+        headers: {
+            'Authorization': `Token ${token}`
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch registration details');
+    }
+    return response.json();
+}
+async function processPayment(paymentData) {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+    const response = await fetch(`${API_BASE_URL}/payments/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
+        },
+        body: JSON.stringify(paymentData)
+    });
+    if (!response.ok) {
+        throw new Error('Failed to process payment');
     }
     return response.json();
 }
