@@ -266,6 +266,7 @@ __turbopack_esm__({
     "fetchMUNById": (()=>fetchMUNById),
     "fetchMUNs": (()=>fetchMUNs),
     "fetchRegistrationById": (()=>fetchRegistrationById),
+    "fetchRegistrationDetails": (()=>fetchRegistrationDetails),
     "login": (()=>login),
     "logout": (()=>logout),
     "processPayment": (()=>processPayment),
@@ -397,6 +398,21 @@ async function fetchRegistrationById(id) {
         throw new Error('No authentication token found');
     }
     const response = await fetch(`${API_BASE_URL}/registrations/${id}/`, {
+        headers: {
+            'Authorization': `Token ${token}`
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch registration details');
+    }
+    return response.json();
+}
+async function fetchRegistrationDetails(registrationId) {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+    const response = await fetch(`${API_BASE_URL}/registrations/${registrationId}/`, {
         headers: {
             'Authorization': `Token ${token}`
         }

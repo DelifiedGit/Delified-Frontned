@@ -190,3 +190,22 @@ export async function fetchRegistrationById(id: string) {
   return response.json();
 }
 
+export async function fetchRegistrationDetails(registrationId: string) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  const response = await fetch(`${API_BASE_URL}/registrations/${registrationId}/`, {
+    headers: {
+      'Authorization': `Token ${token}`,
+    },
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch registration details');
+  }
+
+  return response.json();
+}
+

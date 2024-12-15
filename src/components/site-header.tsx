@@ -83,7 +83,7 @@ export function SiteHeader() {
             {/* Desktop Navigation Menu */}
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/muns" className="text-sm hover:text-[#E03D8D] transition-colors">MUNs</Link>
-              <Link href="/mun-guide" className="text-sm hover:text-[#E03D8D] transition-colors">MUN Guide</Link>
+              <Link href="/mun-guide" className="text-sm hover:text-[#E03D8D] transition-colors">MUN Guide</Link>           
               {isLoggedIn && (
                 <Link href="/dashboard" className="text-sm hover:text-[#E03D8D] transition-colors">Dashboard</Link>
               )}

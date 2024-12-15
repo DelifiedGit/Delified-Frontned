@@ -68,8 +68,7 @@ export default function CheckoutPage({ params }: CheckoutProps) {
         custom_fields: formData,
       })
       console.log('Registration successful:', registration)
-      // router.push(`/muns/${params.id}/confirmation?registrationId=${registration.id}`)
-      router.push(`/muns/${params.id}/confirmation`)
+      router.push(`/muns/${params.id}/confirmation?registrationId=${registration.id}`)
     } catch (error) {
       console.error('Error during registration:', error)
       setError('Registration failed. Please try again.')
