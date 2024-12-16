@@ -41,7 +41,6 @@ export default function DashboardPage() {
       try {
         const token = localStorage.getItem('auth_token')
         if (!token) {
-          console.log('token fails')
           router.push('/login')
           return
         }
@@ -83,7 +82,6 @@ export default function DashboardPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Welcome, {dashboardData.user.full_name}</h1>
-        <Button onClick={handleLogout}>Logout</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

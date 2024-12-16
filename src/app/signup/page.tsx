@@ -19,7 +19,6 @@ export default function SignUpPage() {
     institution: '',
     password: '',
   })
-  console.log(formData)
   const [error, setError] = useState('')
   const router = useRouter()
 
@@ -30,7 +29,6 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      console.log(formData)
       const response = await signUp(formData)
       localStorage.setItem('auth_token', response.token)
       router.push('/login')

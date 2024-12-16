@@ -111,7 +111,6 @@ export async function fetchMUNs() {
 
 export async function fetchMUNById(id: string) {
   const response = await fetch(`${API_BASE_URL}/muns/${id}/`);
-  console.log(response)
   if (!response.ok) {
     throw new Error('Failed to fetch MUN details');
   }

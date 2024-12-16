@@ -20,16 +20,14 @@ export function SiteHeader() {
 
   useEffect(() => {
     const token = localStorage.getItem('auth_token')
-    console.log(token)
     setIsLoggedIn(!!token)
-    console.log('login value '+isLoggedIn)
   }, [])
 
   const handleLogout = async () => {
     try {
       await logout()
       setIsLoggedIn(false)
-      router.push('/login')
+      router.push('/')
     } catch (error) {
       console.error('Logout failed:', error)
     }
