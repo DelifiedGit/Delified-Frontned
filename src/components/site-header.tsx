@@ -91,22 +91,14 @@ export function SiteHeader() {
               <Button variant="ghost" size="icon" className="text-white">
                 <Search className="h-5 w-5" />
               </Button>
-              <Link href="/list-mun">
-                <Button className="bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white">
-                  List MUN
-                </Button>
-              </Link>
+              
               {isLoggedIn ? (
                 <Button onClick={handleLogout} className="bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white">
                   Logout
                 </Button>
               ) : (
                 <>
-                  <Link href="/login">
-                    <Button className="bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white">
-                      Login
-                    </Button>
-                  </Link>
+                  
                   <Link href="/signup">
                     <Button className="bg-[#E03D8D] hover:bg-[#E03D8D]/90 text-white">
                       Sign Up

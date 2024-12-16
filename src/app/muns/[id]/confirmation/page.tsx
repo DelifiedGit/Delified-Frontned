@@ -79,7 +79,7 @@ export default function ConfirmationPage({ params }: ConfirmationProps) {
           ))}
         </CardContent>
         <CardFooter>
-          <Link href="/dashboard" passHref>
+          <Link href="/dash" passHref>
             <Button>Go to Dashboard</Button>
           </Link>
         </CardFooter>
