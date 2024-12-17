@@ -348,6 +348,21 @@ export async function fetchCommunityEvents(communityId: string) {
   return response.json();
 }
 
+export async function fetchCommunityPosts(communityId: string, page: number = 1) {
+  const response = await fetch(`${API_BASE_URL}/communities/${communityId}/posts/?page=${page}`, {
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch community posts');
+  }
+
+  return response.json();
+}
+
+
 
 
 

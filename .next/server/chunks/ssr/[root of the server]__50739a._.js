@@ -272,6 +272,7 @@ __turbopack_esm__({
     "fetchCommunityDetails": (()=>fetchCommunityDetails),
     "fetchCommunityEvents": (()=>fetchCommunityEvents),
     "fetchCommunityMembers": (()=>fetchCommunityMembers),
+    "fetchCommunityPosts": (()=>fetchCommunityPosts),
     "fetchDashboardData": (()=>fetchDashboardData),
     "fetchGeneralFeed": (()=>fetchGeneralFeed),
     "fetchMUNById": (()=>fetchMUNById),
@@ -540,6 +541,17 @@ async function fetchCommunityEvents(communityId) {
     });
     if (!response.ok) {
         throw new Error('Failed to fetch community events');
+    }
+    return response.json();
+}
+async function fetchCommunityPosts(communityId, page = 1) {
+    const response = await fetch(`${API_BASE_URL}/communities/${communityId}/posts/?page=${page}`, {
+        headers: {
+            'Authorization': `Token ${localStorage.getItem('auth_token')}`
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch community posts');
     }
     return response.json();
 }

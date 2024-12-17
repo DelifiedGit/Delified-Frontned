@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Users, MessageCircle, Calendar } from 'lucide-react'
-import { fetchCommunityDetails, createCommunityPost, fetchCommunityMembers, fetchCommunityEvents } from '@/lib/api'
+import { fetchCommunityDetails, createCommunityPost, fetchCommunityMembers, fetchCommunityEvents, fetchCommunityPosts } from '@/lib/api'
 
 interface CommunityData {
   id: string;
@@ -17,6 +17,7 @@ interface CommunityData {
   description: string;
   members_count: number;
   posts_count: number;
+  posts?: Post[];
 }
 
 interface Post {
@@ -47,20 +48,24 @@ export default function CommunityView() {
   const [events, setEvents] = useState<Event[]>([])
   const [newPost, setNewPost] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [hasMore, setHasMore] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const [communityDetails, communityMembers, communityEvents] = await Promise.all([
+        const [communityDetails, communityMembers, communityEvents, communityPosts] = await Promise.all([
           fetchCommunityDetails(communityId),
           fetchCommunityMembers(communityId),
-          fetchCommunityEvents(communityId)
+          fetchCommunityEvents(communityId),
+          fetchCommunityPosts(communityId)
         ])
         setCommunityData(communityDetails)
-        setPosts(communityDetails.posts || [])
         setMembers(communityMembers)
         setEvents(communityEvents)
+        setPosts(communityPosts.results)
+        setHasMore(!!communityPosts.next)
       } catch (error) {
         console.error('Failed to fetch community data:', error)
       } finally {
@@ -76,10 +81,24 @@ export default function CommunityView() {
 
     try {
       const newPostData = await createCommunityPost(communityId, { content: newPost })
-      setPosts([newPostData, ...posts])
+      setPosts(prevPosts => Array.isArray(prevPosts) ? [newPostData, ...prevPosts] : [newPostData])
       setNewPost('')
     } catch (error) {
       console.error('Failed to create post:', error)
+    }
+  }
+
+  const loadMorePosts = async () => {
+    if (!hasMore) return
+
+    try {
+      const nextPage = currentPage + 1
+      const morePosts = await fetchCommunityPosts(communityId, nextPage)
+      setPosts([...posts, ...morePosts.results])
+      setCurrentPage(nextPage)
+      setHasMore(!!morePosts.next)
+    } catch (error) {
+      console.error('Failed to load more posts:', error)
     }
   }
 
@@ -131,29 +150,38 @@ export default function CommunityView() {
               <Button onClick={handlePostSubmit}>Post</Button>
               <Separator className="my-4" />
               <ScrollArea className="h-[600px]">
-                {posts.map((post) => (
-                  <Card key={post.id} className="mb-4">
-                    <CardHeader>
-                      <div className="flex items-center">
-                        <Avatar className="mr-2">
-                          <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={post.author_name} />
-                          <AvatarFallback>{post.author_name[0]}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <CardTitle className="text-sm">{post.author_name}</CardTitle>
-                          <CardDescription>{new Date(post.created_at).toLocaleString()}</CardDescription>
+                {posts && posts.length > 0 ? (
+                  posts.map((post) => (
+                    <Card key={post.id} className="mb-4">
+                      <CardHeader>
+                        <div className="flex items-center">
+                          <Avatar className="mr-2">
+                            <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={post.author_name} />
+                            <AvatarFallback>{post.author_name[0]}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <CardTitle className="text-sm">{post.author_name}</CardTitle>
+                            <CardDescription>{new Date(post.created_at).toLocaleString()}</CardDescription>
+                          </div>
                         </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p>{post.content}</p>
-                    </CardContent>
-                    <CardFooter>
-                      <Button variant="outline" className="mr-2">Like</Button>
-                      <Button variant="outline">Comment</Button>
-                    </CardFooter>
-                  </Card>
-                ))}
+                      </CardHeader>
+                      <CardContent>
+                        <p>{post.content}</p>
+                      </CardContent>
+                      <CardFooter>
+                        <Button variant="outline" className="mr-2">Like</Button>
+                        <Button variant="outline">Comment</Button>
+                      </CardFooter>
+                    </Card>
+                  ))
+                ) : (
+                  <p>No posts yet.</p>
+                )}
+                {hasMore && (
+                  <Button onClick={loadMorePosts} className="w-full mt-4">
+                    Load More
+                  </Button>
+                )}
               </ScrollArea>
             </CardContent>
           </Card>
@@ -166,15 +194,19 @@ export default function CommunityView() {
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[200px]">
-                {events.map((event) => (
-                  <div key={event.id} className="flex items-center mb-4">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    <div>
-                      <p className="font-medium">{event.name}</p>
-                      <p className="text-sm text-muted-foreground">{new Date(event.date).toLocaleString()}</p>
+                {events && events.length > 0 ? (
+                  events.map((event) => (
+                    <div key={event.id} className="flex items-center mb-4">
+                      <Calendar className="mr-2 h-4 w-4" />
+                      <div>
+                        <p className="font-medium">{event.name}</p>
+                        <p className="text-sm text-muted-foreground">{new Date(event.date).toLocaleString()}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p>No upcoming events.</p>
+                )}
               </ScrollArea>
             </CardContent>
             <CardFooter>
@@ -188,18 +220,22 @@ export default function CommunityView() {
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[300px]">
-                {members.map((member) => (
-                  <div key={member.id} className="flex items-center mb-4">
-                    <Avatar className="mr-2">
-                      <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={member.full_name} />
-                      <AvatarFallback>{member.full_name[0]}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium">{member.full_name}</p>
-                      <p className="text-sm text-muted-foreground">{member.institution}</p>
+                {members && members.length > 0 ? (
+                  members.map((member) => (
+                    <div key={member.id} className="flex items-center mb-4">
+                      <Avatar className="mr-2">
+                        <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={member.full_name} />
+                        <AvatarFallback>{member.full_name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium">{member.full_name}</p>
+                        <p className="text-sm text-muted-foreground">{member.institution}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p>No members yet.</p>
+                )}
               </ScrollArea>
             </CardContent>
             <CardFooter>

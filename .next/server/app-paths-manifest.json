@@ -4,5 +4,7 @@
   "/community/[id]/page": "app/community/[id]/page.js",
   "/muns/page": "app/muns/page.js",
   "/dash/page": "app/dash/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/signup/page": "app/signup/page.js",
+  "/login/page": "app/login/page.js"
 }
