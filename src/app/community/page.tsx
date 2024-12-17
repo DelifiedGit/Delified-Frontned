@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,14 +11,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { CalendarDays, Users, MessageCircle, Plus, Search } from 'lucide-react'
+import { fetchCommunities, createCommunity, joinCommunity, fetchGeneralFeed, createPost } from '@/lib/api'
 
-// Mock data for communities
-const communities = [
-  { id: 1, name: "Event Planners United", members: 1200, posts: 450 },
-  { id: 2, name: "Tech Conference Organizers", members: 800, posts: 320 },
-  { id: 3, name: "Wedding Coordinators Network", members: 1500, posts: 600 },
-  { id: 4, name: "Music Festival Creators", members: 950, posts: 410 },
-]
+interface Community {
+  id: string;
+  name: string;
+  members: number;
+  posts: number;
+}
+
+interface Post {
+  id: string;
+  author_name: string;
+  content: string;
+  created_at: string;
+}
 
 export default function CommunityPage() {
   const [email, setEmail] = useState('')
@@ -26,6 +33,27 @@ export default function CommunityPage() {
   const [newCommunityDescription, setNewCommunityDescription] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [newPost, setNewPost] = useState('')
+  const [communities, setCommunities] = useState<Community[]>([])
+  const [myCommunities, setMyCommunities] = useState<Community[]>([])
+  const [generalFeed, setGeneralFeed] = useState<Post[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setIsLoading(true)
+    Promise.all([
+      fetchCommunities(),
+      fetchCommunities({ joined: true }),
+      fetchGeneralFeed()
+    ]).then(([communities, myCommunities, generalFeed]) => {
+      setCommunities(communities)
+      setMyCommunities(myCommunities)
+      setGeneralFeed(generalFeed)
+      setIsLoading(false)
+    }).catch(error => {
+      console.error('Failed to fetch data:', error)
+      setIsLoading(false)
+    })
+  }, [])
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,17 +62,42 @@ export default function CommunityPage() {
     setEmail('')
   }
 
-  const handleCreateCommunity = () => {
-    // TODO: Implement community creation logic
-    console.log('New community:', { name: newCommunityName, description: newCommunityDescription })
-    setNewCommunityName('')
-    setNewCommunityDescription('')
+  const handleCreateCommunity = async () => {
+    try {
+      const newCommunity = await createCommunity({ name: newCommunityName, description: newCommunityDescription })
+      setCommunities([...communities, newCommunity])
+      setMyCommunities([...myCommunities, newCommunity])
+      setNewCommunityName('')
+      setNewCommunityDescription('')
+    } catch (error) {
+      console.error('Failed to create community:', error)
+    }
   }
 
-  const handlePostSubmit = () => {
-    // TODO: Implement post submission logic
-    console.log('New post:', newPost)
-    setNewPost('')
+  const handleJoinCommunity = async (communityId: string) => {
+    try {
+      await joinCommunity(communityId)
+      const updatedCommunity = communities.find(c => c.id === communityId)
+      if (updatedCommunity) {
+        setMyCommunities([...myCommunities, updatedCommunity])
+      }
+    } catch (error) {
+      console.error('Failed to join community:', error)
+    }
+  }
+
+  const handlePostSubmit = async () => {
+    try {
+      const newPostData = await createPost({ content: newPost })
+      setGeneralFeed([newPostData, ...generalFeed])
+      setNewPost('')
+    } catch (error) {
+      console.error('Failed to create post:', error)
+    }
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -86,7 +139,7 @@ export default function CommunityPage() {
                       <CardDescription>{community.members} members • {community.posts} posts</CardDescription>
                     </CardHeader>
                     <CardFooter>
-                      <Button>Join Community</Button>
+                      <Button onClick={() => handleJoinCommunity(community.id)}>Join Community</Button>
                     </CardFooter>
                   </Card>
                 ))}
@@ -102,7 +155,7 @@ export default function CommunityPage() {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-4">
-                {communities.slice(0, 2).map((community) => (
+                {myCommunities.map((community) => (
                   <Card key={community.id}>
                     <CardHeader>
                       <CardTitle>{community.name}</CardTitle>
@@ -180,22 +233,22 @@ export default function CommunityPage() {
                 <Button onClick={handlePostSubmit}>Post</Button>
               </div>
               <div className="space-y-4">
-                {[...Array(3)].map((_, index) => (
-                  <Card key={index}>
+                {generalFeed.map((post, index) => (
+                  <Card key={post.id || index}>
                     <CardHeader>
                       <div className="flex items-center">
                         <Avatar className="mr-2">
                           <AvatarImage src={`/placeholder.svg?height=40&width=40`} />
-                          <AvatarFallback>U{index + 1}</AvatarFallback>
+                          <AvatarFallback>{post.author_name[0]}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <CardTitle className="text-sm">User {index + 1}</CardTitle>
-                          <CardDescription>2 hours ago</CardDescription>
+                          <CardTitle className="text-sm">{post.author_name}</CardTitle>
+                          <CardDescription>{new Date(post.created_at).toLocaleString()}</CardDescription>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <p>This is a sample post in the general feed. It could be about anything related to event planning and management!</p>
+                      <p>{post.content}</p>
                     </CardContent>
                     <CardFooter>
                       <Button variant="outline" className="mr-2">Like</Button>
@@ -268,3 +321,4 @@ export default function CommunityPage() {
     </div>
   )
 }
+

@@ -208,3 +208,146 @@ export async function fetchRegistrationDetails(registrationId: string) {
   return response.json();
 }
 
+export async function fetchCommunities(params = {}) {
+  const queryString = new URLSearchParams(params).toString();
+  const response = await fetch(`${API_BASE_URL}/communities/?${queryString}`, {
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch communities');
+  }
+
+  return response.json();
+}
+
+export async function createCommunity(communityData: {
+  name: string;
+  description: string;
+}) {
+  const response = await fetch(`${API_BASE_URL}/communities/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+    body: JSON.stringify(communityData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create community');
+  }
+
+  return response.json();
+}
+
+export async function joinCommunity(communityId: string) {
+  const response = await fetch(`${API_BASE_URL}/communities/${communityId}/join/`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to join community');
+  }
+
+  return response.json();
+}
+
+export async function fetchGeneralFeed() {
+  const response = await fetch(`${API_BASE_URL}/posts/`, {
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch general feed');
+  }
+
+  return response.json();
+}
+
+export async function createPost(postData: { content: string }) {
+  const response = await fetch(`${API_BASE_URL}/posts/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+    body: JSON.stringify(postData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create post');
+  }
+
+  return response.json();
+}
+
+export async function fetchCommunityDetails(communityId: string) {
+  const response = await fetch(`${API_BASE_URL}/communities/${communityId}/`, {
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch community details');
+  }
+
+  return response.json();
+}
+
+export async function createCommunityPost(communityId: string, postData: { content: string }) {
+  const response = await fetch(`${API_BASE_URL}/communities/${communityId}/posts/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+    body: JSON.stringify(postData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create community post');
+  }
+
+  return response.json();
+}
+
+export async function fetchCommunityMembers(communityId: string) {
+  const response = await fetch(`${API_BASE_URL}/communities/${communityId}/members/`, {
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch community members');
+  }
+
+  return response.json();
+}
+
+export async function fetchCommunityEvents(communityId: string) {
+  const response = await fetch(`${API_BASE_URL}/communities/${communityId}/events/`, {
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch community events');
+  }
+
+  return response.json();
+}
+
+
+
+

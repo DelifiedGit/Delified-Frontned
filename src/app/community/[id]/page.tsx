@@ -1,53 +1,94 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Users, MessageCircle, Calendar } from 'lucide-react'
+import { fetchCommunityDetails, createCommunityPost, fetchCommunityMembers, fetchCommunityEvents } from '@/lib/api'
 
-// Mock data for the community
-const communityData = {
-  id: '1',
-  name: 'Event Planners United',
-  description: 'A community for professional event planners to share ideas, tips, and experiences.',
-  members: 1200,
-  posts: 450,
-  events: [
-    { id: 1, name: 'Virtual Networking Mixer', date: '2024-07-15' },
-    { id: 2, name: 'Event Tech Workshop', date: '2024-08-02' },
-  ],
+interface CommunityData {
+  id: string;
+  name: string;
+  description: string;
+  members_count: number;
+  posts_count: number;
 }
 
-const posts = [
-  { id: 1, author: 'Jane Doe', content: 'Just finished planning an amazing corporate event! Can\'t wait to share the details with everyone.', likes: 24, comments: 5 },
-  { id: 2, author: 'John Smith', content: 'Looking for recommendations on the best event management software. Any suggestions?', likes: 15, comments: 8 },
-  { id: 3, author: 'Emily Brown', content: 'Excited to announce our upcoming webinar on sustainable event planning. Save the date!', likes: 32, comments: 12 },
-]
+interface Post {
+  id: string;
+  author_name: string;
+  content: string;
+  created_at: string;
+}
 
-const members = [
-  { id: 1, name: 'Jane Doe', role: 'Event Planner' },
-  { id: 2, name: 'John Smith', role: 'Venue Coordinator' },
-  { id: 3, name: 'Emily Brown', role: 'Marketing Specialist' },
-  { id: 4, name: 'Michael Johnson', role: 'Tech Support' },
-  { id: 5, name: 'Sarah Williams', role: 'Catering Manager' },
-]
+interface Member {
+  id: string;
+  full_name: string;
+  institution: string;
+}
+
+interface Event {
+  id: string;
+  name: string;
+  date: string;
+}
 
 export default function CommunityView() {
   const params = useParams()
-  const communityId = params.id
+  const communityId = params.id as string
+  const [communityData, setCommunityData] = useState<CommunityData | null>(null)
+  const [posts, setPosts] = useState<Post[]>([])
+  const [members, setMembers] = useState<Member[]>([])
+  const [events, setEvents] = useState<Event[]>([])
   const [newPost, setNewPost] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
-  const handlePostSubmit = () => {
-    // TODO: Implement post submission logic
-    console.log('New post in community:', communityId, newPost)
-    setNewPost('')
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const [communityDetails, communityMembers, communityEvents] = await Promise.all([
+          fetchCommunityDetails(communityId),
+          fetchCommunityMembers(communityId),
+          fetchCommunityEvents(communityId)
+        ])
+        setCommunityData(communityDetails)
+        setPosts(communityDetails.posts || [])
+        setMembers(communityMembers)
+        setEvents(communityEvents)
+      } catch (error) {
+        console.error('Failed to fetch community data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [communityId])
+
+  const handlePostSubmit = async () => {
+    if (!newPost.trim()) return
+
+    try {
+      const newPostData = await createCommunityPost(communityId, { content: newPost })
+      setPosts([newPostData, ...posts])
+      setNewPost('')
+    } catch (error) {
+      console.error('Failed to create post:', error)
+    }
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (!communityData) {
+    return <div>Community not found</div>
   }
 
   return (
@@ -62,11 +103,11 @@ export default function CommunityView() {
             <div className="flex space-x-4">
               <div className="flex items-center">
                 <Users className="mr-2 h-4 w-4" />
-                <span>{communityData.members} members</span>
+                <span>{communityData.members_count} members</span>
               </div>
               <div className="flex items-center">
                 <MessageCircle className="mr-2 h-4 w-4" />
-                <span>{communityData.posts} posts</span>
+                <span>{communityData.posts_count} posts</span>
               </div>
             </div>
             <Button>Invite Members</Button>
@@ -95,12 +136,12 @@ export default function CommunityView() {
                     <CardHeader>
                       <div className="flex items-center">
                         <Avatar className="mr-2">
-                          <AvatarImage src={`/placeholder.svg?height=40&width=40`} />
-                          <AvatarFallback>{post.author[0]}</AvatarFallback>
+                          <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={post.author_name} />
+                          <AvatarFallback>{post.author_name[0]}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <CardTitle className="text-sm">{post.author}</CardTitle>
-                          <CardDescription>2 hours ago</CardDescription>
+                          <CardTitle className="text-sm">{post.author_name}</CardTitle>
+                          <CardDescription>{new Date(post.created_at).toLocaleString()}</CardDescription>
                         </div>
                       </div>
                     </CardHeader>
@@ -108,8 +149,8 @@ export default function CommunityView() {
                       <p>{post.content}</p>
                     </CardContent>
                     <CardFooter>
-                      <Button variant="outline" className="mr-2">Like ({post.likes})</Button>
-                      <Button variant="outline">Comment ({post.comments})</Button>
+                      <Button variant="outline" className="mr-2">Like</Button>
+                      <Button variant="outline">Comment</Button>
                     </CardFooter>
                   </Card>
                 ))}
@@ -125,12 +166,12 @@ export default function CommunityView() {
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[200px]">
-                {communityData.events.map((event) => (
+                {events.map((event) => (
                   <div key={event.id} className="flex items-center mb-4">
                     <Calendar className="mr-2 h-4 w-4" />
                     <div>
                       <p className="font-medium">{event.name}</p>
-                      <p className="text-sm text-muted-foreground">{event.date}</p>
+                      <p className="text-sm text-muted-foreground">{new Date(event.date).toLocaleString()}</p>
                     </div>
                   </div>
                 ))}
@@ -150,12 +191,12 @@ export default function CommunityView() {
                 {members.map((member) => (
                   <div key={member.id} className="flex items-center mb-4">
                     <Avatar className="mr-2">
-                      <AvatarImage src={`/placeholder.svg?height=40&width=40`} />
-                      <AvatarFallback>{member.name[0]}</AvatarFallback>
+                      <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={member.full_name} />
+                      <AvatarFallback>{member.full_name[0]}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">{member.name}</p>
-                      <p className="text-sm text-muted-foreground">{member.role}</p>
+                      <p className="font-medium">{member.full_name}</p>
+                      <p className="text-sm text-muted-foreground">{member.institution}</p>
                     </div>
                   </div>
                 ))}
@@ -170,3 +211,4 @@ export default function CommunityView() {
     </div>
   )
 }
+
