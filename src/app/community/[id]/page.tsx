@@ -8,8 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { Users, MessageCircle, Calendar } from 'lucide-react'
-import { fetchCommunityDetails, createCommunityPost, fetchCommunityMembers, fetchCommunityEvents, fetchCommunityPosts } from '@/lib/api'
+import { Users, MessageCircle, Calendar, Heart } from 'lucide-react'
+import { fetchCommunityDetails, createCommunityPost, fetchCommunityMembers, fetchCommunityEvents, fetchCommunityPosts, likePost, fetchComments, createComment } from '@/lib/api'
 
 interface CommunityData {
   id: string;
@@ -21,6 +21,16 @@ interface CommunityData {
 }
 
 interface Post {
+  id: string;
+  author_name: string;
+  content: string;
+  created_at: string;
+  likes_count: number;
+  is_liked: boolean;
+  comments: Comment[];
+}
+
+interface Comment {
   id: string;
   author_name: string;
   content: string;
@@ -81,10 +91,40 @@ export default function CommunityView() {
 
     try {
       const newPostData = await createCommunityPost(communityId, { content: newPost })
-      setPosts(prevPosts => Array.isArray(prevPosts) ? [newPostData, ...prevPosts] : [newPostData])
+      setPosts(prevPosts => [newPostData, ...prevPosts])
       setNewPost('')
     } catch (error) {
       console.error('Failed to create post:', error)
+    }
+  }
+
+  const handleLike = async (postId: string) => {
+    try {
+      const result = await likePost(postId)
+      setPosts(prevPosts =>
+        prevPosts.map(post =>
+          post.id === postId
+            ? { ...post, is_liked: result.liked, likes_count: result.liked ? post.likes_count + 1 : post.likes_count - 1 }
+            : post
+        )
+      )
+    } catch (error) {
+      console.error('Failed to like/unlike post:', error)
+    }
+  }
+
+  const handleComment = async (postId: string, content: string) => {
+    try {
+      const newComment = await createComment(postId, content)
+      setPosts(prevPosts =>
+        prevPosts.map(post =>
+          post.id === postId
+            ? { ...post, comments: [...post.comments, newComment] }
+            : post
+        )
+      )
+    } catch (error) {
+      console.error('Failed to create comment:', error)
     }
   }
 
@@ -94,7 +134,7 @@ export default function CommunityView() {
     try {
       const nextPage = currentPage + 1
       const morePosts = await fetchCommunityPosts(communityId, nextPage)
-      setPosts([...posts, ...morePosts.results])
+      setPosts(prevPosts => [...prevPosts, ...morePosts.results])
       setCurrentPage(nextPage)
       setHasMore(!!morePosts.next)
     } catch (error) {
@@ -169,9 +209,27 @@ export default function CommunityView() {
                         <p>{post.content}</p>
                       </CardContent>
                       <CardFooter>
-                        <Button variant="outline" className="mr-2">Like</Button>
-                        <Button variant="outline">Comment</Button>
+                        <Button
+                          variant="outline"
+                          className="mr-2"
+                          onClick={() => handleLike(post.id)}
+                        >
+                          <Heart className={`mr-2 h-4 w-4 ${post.is_liked ? 'fill-current text-red-500' : ''}`} />
+                          Like ({post.likes_count})
+                        </Button>
+                        <Button variant="outline" onClick={() => handleComment(post.id, 'Test comment')}>Comment</Button>
                       </CardFooter>
+                      {post.comments.length > 0 && (
+                        <CardContent>
+                          <h4 className="mb-2 font-semibold">Comments:</h4>
+                          {post.comments.map((comment) => (
+                            <div key={comment.id} className="mb-2">
+                              <p className="text-sm font-medium">{comment.author_name}</p>
+                              <p className="text-sm">{comment.content}</p>
+                            </div>
+                          ))}
+                        </CardContent>
+                      )}
                     </Card>
                   ))
                 ) : (

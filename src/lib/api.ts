@@ -362,6 +362,52 @@ export async function fetchCommunityPosts(communityId: string, page: number = 1)
   return response.json();
 }
 
+export async function likePost(postId: string) {
+  const response = await fetch(`${API_BASE_URL}/posts/${postId}/like/`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to like/unlike post');
+  }
+
+  return response.json();
+}
+
+export async function fetchComments(postId: string) {
+  const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments/`, {
+    headers: {
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch comments');
+  }
+
+  return response.json();
+}
+
+export async function createComment(postId: string, content: string) {
+  const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+    },
+    body: JSON.stringify({ content }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create comment');
+  }
+
+  return response.json();
+}
+
 
 
 
