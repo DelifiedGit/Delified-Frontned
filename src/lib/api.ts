@@ -119,6 +119,7 @@ export async function fetchMUNById(id: string) {
 }
 
 export async function processPayment(paymentData: {
+ 
   munId: string;
   amount: number;
 }) {
@@ -223,11 +224,16 @@ export async function createCommunity(communityData: {
   name: string;
   description: string;
 }) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/communities/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
     body: JSON.stringify(communityData),
   });
@@ -240,10 +246,15 @@ export async function createCommunity(communityData: {
 }
 
 export async function joinCommunity(communityId: string) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/communities/${communityId}/join/`, {
     method: 'POST',
     headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
   });
 
@@ -264,13 +275,17 @@ export async function fetchGeneralFeed() {
   return response.json();
 }
 
-
 export async function createPost(postData: { content: string }) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/posts/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
     body: JSON.stringify(postData),
   });
@@ -283,9 +298,14 @@ export async function createPost(postData: { content: string }) {
 }
 
 export async function fetchCommunityDetails(communityId: string) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/communities/${communityId}/`, {
     headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
   });
 
@@ -297,11 +317,16 @@ export async function fetchCommunityDetails(communityId: string) {
 }
 
 export async function createCommunityPost(communityId: string, postData: { content: string }) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/communities/${communityId}/posts/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
     body: JSON.stringify(postData),
   });
@@ -314,9 +339,14 @@ export async function createCommunityPost(communityId: string, postData: { conte
 }
 
 export async function fetchCommunityMembers(communityId: string) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/communities/${communityId}/members/`, {
     headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
   });
 
@@ -328,9 +358,14 @@ export async function fetchCommunityMembers(communityId: string) {
 }
 
 export async function fetchCommunityEvents(communityId: string) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/communities/${communityId}/events/`, {
     headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
   });
 
@@ -342,12 +377,18 @@ export async function fetchCommunityEvents(communityId: string) {
 }
 
 export async function fetchCommunityPosts(communityId: string, page: number = 1) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/communities/${communityId}/posts/?page=${page}`, {
     headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
   });
 
+  console.log(response)
   if (!response.ok) {
     throw new Error('Failed to fetch community posts');
   }
@@ -356,10 +397,15 @@ export async function fetchCommunityPosts(communityId: string, page: number = 1)
 }
 
 export async function likePost(postId: string) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/posts/${postId}/like/`, {
     method: 'POST',
     headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
   });
 
@@ -370,11 +416,15 @@ export async function likePost(postId: string) {
   return response.json();
 }
 
-
 export async function fetchComments(postId: string) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments/`, {
     headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
   });
 
@@ -386,11 +436,16 @@ export async function fetchComments(postId: string) {
 }
 
 export async function createComment(postId: string, content: string) {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
   const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      'Authorization': `Token ${token}`,
     },
     body: JSON.stringify({ content }),
   });
@@ -402,7 +457,24 @@ export async function createComment(postId: string, content: string) {
   return response.json();
 }
 
+export async function sendContactMessage(messageData: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}) {
+  const response = await fetch(`${API_BASE_URL}/contact/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(messageData),
+  });
 
+  if (!response.ok) {
+    throw new Error('Failed to send contact message');
+  }
 
-
+  return response.json();
+}
 

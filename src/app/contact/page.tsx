@@ -9,26 +9,38 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import { MapPin, Phone, Mail } from 'lucide-react'
+import { sendContactMessage } from '@/lib/api'
 
 export default function ContactPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you would typically send the form data to your backend
-    console.log({ name, email, subject, message })
-    toast({
-      title: "Message Sent",
-      description: "We've received your message and will get back to you soon.",
-    })
-    // Reset form fields
-    setName('')
-    setEmail('')
-    setSubject('')
-    setMessage('')
+    setIsSubmitting(true)
+    try {
+      await sendContactMessage({ name, email, subject, message })
+      toast({
+        title: "Message Sent",
+        description: "We've received your message and will get back to you soon.",
+      })
+      // Reset form fields
+      setName('')
+      setEmail('')
+      setSubject('')
+      setMessage('')
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -72,7 +84,9 @@ export default function ContactPage() {
                 <Label htmlFor="message">Message</Label>
                 <Textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} required />
               </div>
-              <Button type="submit">Send Message</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </Button>
             </form>
           </CardContent>
         </Card>
@@ -101,3 +115,4 @@ export default function ContactPage() {
     </div>
   )
 }
+

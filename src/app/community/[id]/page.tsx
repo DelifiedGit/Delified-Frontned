@@ -61,29 +61,37 @@ export default function CommunityView() {
   const [currentPage, setCurrentPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true)
-        const [communityDetails, communityMembers, communityEvents, communityPosts] = await Promise.all([
-          fetchCommunityDetails(communityId),
-          fetchCommunityMembers(communityId),
-          fetchCommunityEvents(communityId),
-          fetchCommunityPosts(communityId)
-        ])
-        setCommunityData(communityDetails)
-        setMembers(communityMembers)
-        setEvents(communityEvents)
-        setPosts(communityPosts.results)
-        setHasMore(!!communityPosts.next)
-      } catch (error) {
-        console.error('Failed to fetch community data:', error)
-      } finally {
-        setIsLoading(false)
-      }
+  const fetchData = async () => {
+    try {
+      setIsLoading(true)
+      const [communityDetails, communityMembers, communityEvents, communityPosts] = await Promise.all([
+        fetchCommunityDetails(communityId),
+        fetchCommunityMembers(communityId),
+        fetchCommunityEvents(communityId),
+        fetchCommunityPosts(communityId, 1)
+      ])
+      setCommunityData(communityDetails)
+      setMembers(communityMembers)
+      setEvents(communityEvents)
+      setPosts(communityPosts.results)
+      setHasMore(!!communityPosts.next)
+      setCurrentPage(1)
+    } catch (error) {
+      console.error('Failed to fetch community data:', error)
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchData()
+  }, [communityId])
+
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token')
+    if (token) {
+      fetchData()
+    }
   }, [communityId])
 
   const handlePostSubmit = async () => {
@@ -91,7 +99,7 @@ export default function CommunityView() {
 
     try {
       const newPostData = await createCommunityPost(communityId, { content: newPost })
-      setPosts(prevPosts => [newPostData, ...prevPosts])
+      setPosts(prevPosts => Array.isArray(prevPosts) ? [newPostData, ...prevPosts] : [newPostData])
       setNewPost('')
     } catch (error) {
       console.error('Failed to create post:', error)
@@ -190,7 +198,7 @@ export default function CommunityView() {
               <Button onClick={handlePostSubmit}>Post</Button>
               <Separator className="my-4" />
               <ScrollArea className="h-[600px]">
-                {posts && posts.length > 0 ? (
+                {posts && posts.length >= 0 ? (
                   posts.map((post) => (
                     <Card key={post.id} className="mb-4">
                       <CardHeader>
