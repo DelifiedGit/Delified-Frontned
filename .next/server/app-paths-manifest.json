@@ -1,15 +1,8 @@
 {
-  "/community/[id]/page": "app/community/[id]/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
-  "/community/page": "app/community/page.js",
-  "/muns/page": "app/muns/page.js",
-  "/mun-guide/page": "app/mun-guide/page.js",
-  "/list-mun/page": "app/list-mun/page.js",
-  "/signup/page": "app/signup/page.js",
-  "/login/page": "app/login/page.js",
-  "/dash/page": "app/dash/page.js",
-  "/muns/[id]/page": "app/muns/[id]/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/admin/login/page": "app/admin/login/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/auth/admin-login/route": "app/api/auth/admin-login/route.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/api/auth/check/route": "app/api/auth/check/route.js"
 }

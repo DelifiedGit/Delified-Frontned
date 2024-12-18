@@ -6,20 +6,33 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from '@/components/ui/use-toast'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { UserManagement } from '@/components/admin/UserManagement'
+import { EventManagement } from '@/components/admin/EventManagement'
+import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard'
+import { ContentManagement } from '@/components/admin/ContentManagement'
+import { NotificationCenter } from '@/components/admin/NotificationCenter'
+import { APIManagement } from '@/components/admin/APIManagement'
+import { FeedbackSupport } from '@/components/admin/FeedbackSupport'
+import { AuditLogs } from '@/components/admin/AuditLogs'
+import { Settings } from '@/components/admin/Settings'
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [userRole, setUserRole] = useState('')
   const router = useRouter()
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const response = await fetch('/api/auth/check', {
-          credentials: 'include', // This ensures cookies are sent with the request
+          credentials: 'include',
         })
         if (response.ok) {
+          const data = await response.json()
           setIsAuthenticated(true)
+          setUserRole(data.role)
         } else {
           throw new Error('Not authenticated')
         }
@@ -76,21 +89,52 @@ export default function AdminDashboard() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <Button onClick={handleLogout}>Logout</Button>
+        <div>
+          <span className="mr-4">Role: {userRole}</span>
+          <Button onClick={handleLogout}>Logout</Button>
+        </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>MUN Management</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Link href="/admin/create-mun" passHref>
-              <Button>Create New MUN</Button>
-            </Link>
-          </CardContent>
-        </Card>
-        {/* Add more admin features here */}
-      </div>
+      <Tabs defaultValue="user-management" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9">
+          <TabsTrigger value="user-management">Users</TabsTrigger>
+          <TabsTrigger value="event-management">Events</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="content-management">Content</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="api-management">API</TabsTrigger>
+          <TabsTrigger value="feedback-support">Support</TabsTrigger>
+          <TabsTrigger value="audit-logs">Audit Logs</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="user-management">
+          <UserManagement userRole={userRole} />
+        </TabsContent>
+        <TabsContent value="event-management">
+          <EventManagement userRole={userRole} />
+        </TabsContent>
+        <TabsContent value="analytics">
+          <AnalyticsDashboard userRole={userRole} />
+        </TabsContent>
+        <TabsContent value="content-management">
+          <ContentManagement userRole={userRole} />
+        </TabsContent>
+        <TabsContent value="notifications">
+          <NotificationCenter userRole={userRole} />
+        </TabsContent>
+        <TabsContent value="api-management">
+          <APIManagement userRole={userRole} />
+        </TabsContent>
+        <TabsContent value="feedback-support">
+          <FeedbackSupport userRole={userRole} />
+        </TabsContent>
+        <TabsContent value="audit-logs">
+          <AuditLogs userRole={userRole} />
+        </TabsContent>
+        <TabsContent value="settings">
+          <Settings userRole={userRole} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
+
