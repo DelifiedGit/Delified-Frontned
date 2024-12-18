@@ -10,5 +10,6 @@
   "/login/page": "app/login/page.js",
   "/dash/page": "app/dash/page.js",
   "/muns/[id]/page": "app/muns/[id]/page.js",
-  "/contact/page": "app/contact/page.js"
+  "/contact/page": "app/contact/page.js",
+  "/_not-found/page": "app/_not-found/page.js"
 }

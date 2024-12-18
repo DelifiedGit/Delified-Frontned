@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import { MapPin, Phone, Mail } from 'lucide-react'
 import { sendContactMessage } from '@/lib/api'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 
 export default function ContactPage() {
   const [name, setName] = useState('')
@@ -17,16 +18,14 @@ export default function ContactPage() {
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     try {
       await sendContactMessage({ name, email, subject, message })
-      toast({
-        title: "Message Sent",
-        description: "We've received your message and will get back to you soon.",
-      })
+      setIsPopupOpen(true)
       // Reset form fields
       setName('')
       setEmail('')
@@ -112,6 +111,20 @@ export default function ContactPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={isPopupOpen} onOpenChange={setIsPopupOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Message Sent Successfully</DialogTitle>
+            <DialogDescription>
+              Thank you for contacting us. We've received your message and will get back to you soon.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setIsPopupOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
