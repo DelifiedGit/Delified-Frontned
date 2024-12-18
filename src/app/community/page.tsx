@@ -8,10 +8,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { CalendarDays, Users, MessageCircle, Plus, Search } from 'lucide-react'
-import { fetchCommunities, createCommunity, joinCommunity, fetchGeneralFeed, createPost } from '@/lib/api'
+import { fetchCommunities, createCommunity, joinCommunity, fetchGeneralFeed, createPost, login } from '@/lib/api'
+import { useRouter } from 'next/navigation'
 
 interface Community {
   id: string;
@@ -37,12 +38,27 @@ export default function CommunityPage() {
   const [myCommunities, setMyCommunities] = useState<Community[]>([])
   const [generalFeed, setGeneralFeed] = useState<Post[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [loginEmail, setLoginEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [loginError, setLoginError] = useState('')
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('auth_token')
+      setIsAuthenticated(!!token)
+    }
+
+    checkAuth()
+  }, [])
 
   useEffect(() => {
     setIsLoading(true)
     Promise.all([
       fetchCommunities(),
-      fetchCommunities({ joined: true }),
+      isAuthenticated ? fetchCommunities({ joined: true }) : Promise.resolve([]),
       fetchGeneralFeed()
     ]).then(([communities, myCommunities, generalFeed]) => {
       setCommunities(communities)
@@ -53,7 +69,7 @@ export default function CommunityPage() {
       console.error('Failed to fetch data:', error)
       setIsLoading(false)
     })
-  }, [])
+  }, [isAuthenticated])
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,6 +79,11 @@ export default function CommunityPage() {
   }
 
   const handleCreateCommunity = async () => {
+    if (!isAuthenticated) {
+      setIsLoginDialogOpen(true)
+      return
+    }
+
     try {
       const newCommunity = await createCommunity({ name: newCommunityName, description: newCommunityDescription })
       setCommunities([...communities, newCommunity])
@@ -75,6 +96,11 @@ export default function CommunityPage() {
   }
 
   const handleJoinCommunity = async (communityId: string) => {
+    if (!isAuthenticated) {
+      setIsLoginDialogOpen(true)
+      return
+    }
+
     try {
       await joinCommunity(communityId)
       const updatedCommunity = communities.find(c => c.id === communityId)
@@ -87,6 +113,11 @@ export default function CommunityPage() {
   }
 
   const handlePostSubmit = async () => {
+    if (!isAuthenticated) {
+      setIsLoginDialogOpen(true)
+      return
+    }
+
     try {
       const newPostData = await createPost({ content: newPost })
       setGeneralFeed([newPostData, ...generalFeed])
@@ -154,21 +185,25 @@ export default function CommunityPage() {
               <CardDescription>Communities you've joined or created</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                {myCommunities.map((community) => (
-                  <Card key={community.id}>
-                    <CardHeader>
-                      <CardTitle>{community.name}</CardTitle>
-                      <CardDescription>{community.members} members • {community.posts} posts</CardDescription>
-                    </CardHeader>
-                    <CardFooter>
-                      <Link href={`/community/${community.id}`} passHref>
-                        <Button variant="outline">View Community</Button>
-                      </Link>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
+              {isAuthenticated ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {myCommunities.map((community) => (
+                    <Card key={community.id}>
+                      <CardHeader>
+                        <CardTitle>{community.name}</CardTitle>
+                        <CardDescription>{community.members} members • {community.posts} posts</CardDescription>
+                      </CardHeader>
+                      <CardFooter>
+                        <Link href={`/community/${community.id}`} passHref>
+                          <Button variant="outline">View Community</Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <p>Please log in to view your communities.</p>
+              )}
             </CardContent>
             <CardFooter>
               <Dialog>
@@ -223,15 +258,17 @@ export default function CommunityPage() {
               <CardDescription>Share your thoughts with the entire Delified community</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="mb-4">
-                <Textarea
-                  placeholder="What's on your mind?"
-                  value={newPost}
-                  onChange={(e) => setNewPost(e.target.value)}
-                  className="mb-2"
-                />
-                <Button onClick={handlePostSubmit}>Post</Button>
-              </div>
+              {isAuthenticated && (
+                <div className="mb-4">
+                  <Textarea
+                    placeholder="What's on your mind?"
+                    value={newPost}
+                    onChange={(e) => setNewPost(e.target.value)}
+                    className="mb-2"
+                  />
+                  <Button onClick={handlePostSubmit}>Post</Button>
+                </div>
+              )}
               <div className="space-y-4">
                 {generalFeed.map((post, index) => (
                   <Card key={post.id || index}>
@@ -318,6 +355,60 @@ export default function CommunityPage() {
           </CardContent>
         </Card>
       </section>
+
+      <Dialog open={isLoginDialogOpen} onOpenChange={setIsLoginDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Login Required</DialogTitle>
+            <DialogDescription>
+              You need to be logged in to perform this action.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={async (e) => {
+            e.preventDefault()
+            try {
+              const response = await login({ email: loginEmail, password: loginPassword })
+              localStorage.setItem('auth_token', response.token)
+              setIsAuthenticated(true)
+              setIsLoginDialogOpen(false)
+              setLoginEmail('')
+              setLoginPassword('')
+              setLoginError('')
+              router.push('/community')
+            } catch (error) {
+              setLoginError('Login failed. Please check your credentials.')
+            }
+          }}>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="email">Email</Label>
+                <Input 
+                  id="email" 
+                  type="email" 
+                  value={loginEmail} 
+                  onChange={(e) => setLoginEmail(e.target.value)} 
+                  required 
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="password">Password</Label>
+                <Input 
+                  id="password" 
+                  type="password" 
+                  value={loginPassword} 
+                  onChange={(e) => setLoginPassword(e.target.value)} 
+                  required 
+                />
+              </div>
+            </div>
+            {loginError && <p className="text-red-500 mt-4">{loginError}</p>}
+            <DialogFooter className="mt-4">
+              <Button type="submit">Login</Button>
+              <Button variant="outline" onClick={() => setIsLoginDialogOpen(false)}>Cancel</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

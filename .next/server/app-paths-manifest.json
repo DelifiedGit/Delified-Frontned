@@ -7,5 +7,6 @@
   "/mun-guide/page": "app/mun-guide/page.js",
   "/list-mun/page": "app/list-mun/page.js",
   "/signup/page": "app/signup/page.js",
-  "/login/page": "app/login/page.js"
+  "/login/page": "app/login/page.js",
+  "/dash/page": "app/dash/page.js"
 }

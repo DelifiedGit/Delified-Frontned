@@ -210,11 +210,7 @@ export async function fetchRegistrationDetails(registrationId: string) {
 
 export async function fetchCommunities(params = {}) {
   const queryString = new URLSearchParams(params).toString();
-  const response = await fetch(`${API_BASE_URL}/communities/?${queryString}`, {
-    headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
-    },
-  });
+  const response = await fetch(`${API_BASE_URL}/communities/?${queryString}`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch communities');
@@ -259,11 +255,7 @@ export async function joinCommunity(communityId: string) {
 }
 
 export async function fetchGeneralFeed() {
-  const response = await fetch(`${API_BASE_URL}/posts/`, {
-    headers: {
-      'Authorization': `Token ${localStorage.getItem('auth_token')}`,
-    },
-  });
+  const response = await fetch(`${API_BASE_URL}/posts/`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch general feed');
@@ -271,6 +263,7 @@ export async function fetchGeneralFeed() {
 
   return response.json();
 }
+
 
 export async function createPost(postData: { content: string }) {
   const response = await fetch(`${API_BASE_URL}/posts/`, {
@@ -376,6 +369,7 @@ export async function likePost(postId: string) {
 
   return response.json();
 }
+
 
 export async function fetchComments(postId: string) {
   const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments/`, {
