@@ -6,17 +6,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Checkbox } from '@/components/ui/checkbox'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { fetchMUNById, createRegistration } from '@/lib/api'
+import { fetchMUNById, processPayment, createRegistration } from '@/lib/api'
 
 interface MUNEvent {
   id: string
   event_name: string
-  price: number
-  customFields?: { [key: string]: string | string[] }
-  registration_fees: string
+  registration_fees: number
 }
 
 interface CheckoutProps {
@@ -25,21 +20,18 @@ interface CheckoutProps {
 
 export default function CheckoutPage({ params }: CheckoutProps) {
   const [munEvent, setMunEvent] = useState<MUNEvent | null>(null)
-  const [formData, setFormData] = useState<{ [key: string]: string | string[] }>({})
+  const [formData, setFormData] = useState<{ [key: string]: string }>({})
   const [isLoading, setIsLoading] = useState(true)
+  const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const paymentId = searchParams.get('paymentId')
   const encodedFormData = searchParams.get('formData')
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        if (!paymentId) {
-          throw new Error('Payment ID is missing')
-        }
         const munData = await fetchMUNById(params.id)
         setMunEvent(munData)
         if (encodedFormData) {
@@ -54,25 +46,40 @@ export default function CheckoutPage({ params }: CheckoutProps) {
     }
 
     fetchData()
-  }, [params.id, paymentId, encodedFormData])
+  }, [params.id, encodedFormData])
 
-  const handleInputChange = (key: string, value: string | string[]) => {
+  const handleInputChange = (key: string, value: string) => {
     setFormData(prev => ({ ...prev, [key]: value }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!munEvent) return
+
+    setIsProcessing(true)
+    setError(null)
+
     try {
-      const registration = await createRegistration({
-        mun: params.id,
-        payment_id: paymentId!,
+      // Process payment
+      const paymentResult = await processPayment({
+        munId: munEvent.id,
+        amount: munEvent.registration_fees,
+      })
+
+      // Create registration
+      const registrationResult = await createRegistration({
+        mun: munEvent.id,
+        payment_id: paymentResult.payment_id,
         custom_fields: formData,
       })
-      console.log('Registration successful:', registration)
-      router.push(`/muns/${params.id}/confirmation?registrationId=${registration.id}`)
+
+      // Redirect to confirmation page
+      router.push(`/muns/${params.id}/confirmation?registrationId=${registrationResult.id}`)
     } catch (error) {
-      console.error('Error during registration:', error)
-      setError('Registration failed. Please try again.')
+      console.error('Error during checkout:', error)
+      setError('Checkout failed. Please try again.')
+    } finally {
+      setIsProcessing(false)
     }
   }
 
@@ -93,39 +100,16 @@ export default function CheckoutPage({ params }: CheckoutProps) {
             <CardTitle>Registration Details</CardTitle>
           </CardHeader>
           <CardContent>
-            {munEvent.customFields && Object.entries(munEvent.customFields).map(([key, field]) => (
+            {Object.entries(formData).map(([key, value]) => (
               <div key={key} className="mb-4">
                 <Label htmlFor={key}>{key}</Label>
-                {Array.isArray(field) ? (
-                  field.length > 3 ? (
-                    <Select onValueChange={(value) => handleInputChange(key, value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={`Select ${key}`} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {field.map((option, index) => (
-                          <SelectItem key={index} value={option}>{option}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <RadioGroup onValueChange={(value) => handleInputChange(key, value)}>
-                      {field.map((option, index) => (
-                        <div key={index} className="flex items-center space-x-2">
-                          <RadioGroupItem value={option} id={`${key}-${index}`} />
-                          <Label htmlFor={`${key}-${index}`}>{option}</Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  )
-                ) : (
-                  <Input
-                    id={key}
-                    value={formData[key] as string}
-                    onChange={(e) => handleInputChange(key, e.target.value)}
-                    required
-                  />
-                )}
+                <Input
+                  id={key}
+                  value={value}
+                  onChange={(e) => handleInputChange(key, e.target.value)}
+                  required
+                  disabled
+                />
               </div>
             ))}
           </CardContent>
@@ -153,7 +137,9 @@ export default function CheckoutPage({ params }: CheckoutProps) {
           <CardFooter>
             <div className="w-full flex justify-between items-center">
               <span className="text-2xl font-bold">Total: ₹{munEvent.registration_fees}</span>
-              <Button type="submit">Complete Registration</Button>
+              <Button type="submit" disabled={isProcessing}>
+                {isProcessing ? 'Processing...' : 'Complete Payment'}
+              </Button>
             </div>
           </CardFooter>
         </Card>

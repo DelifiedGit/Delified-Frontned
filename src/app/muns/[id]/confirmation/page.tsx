@@ -18,6 +18,10 @@ interface RegistrationDetails {
     event_name: string
   }
   custom_fields: Record<string, any>
+  payment: {
+    amount: number
+    status: string
+  }
 }
 
 export default function ConfirmationPage({ params }: ConfirmationProps) {
@@ -77,6 +81,13 @@ export default function ConfirmationPage({ params }: ConfirmationProps) {
               <strong>{key}:</strong> {Array.isArray(value) ? value.join(', ') : value}
             </p>
           ))}
+          <h3 className="text-xl font-semibold mt-4 mb-2">Payment Details:</h3>
+          <p className="mb-2">
+            <strong>Amount:</strong> ₹{registration.payment.amount}
+          </p>
+          <p className="mb-2">
+            <strong>Status:</strong> {registration.payment.status}
+          </p>
         </CardContent>
         <CardFooter>
           <Link href="/dash" passHref>

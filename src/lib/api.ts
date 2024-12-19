@@ -119,7 +119,6 @@ export async function fetchMUNById(id: string) {
 }
 
 export async function processPayment(paymentData: {
- 
   munId: string;
   amount: number;
 }) {
