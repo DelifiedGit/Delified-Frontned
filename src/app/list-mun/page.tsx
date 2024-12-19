@@ -47,7 +47,7 @@ export default function InteractiveListMUNPage() {
   }
 
   const updateCustomField = (id: string, updates: Partial<CustomField>) => {
-    setCustomFields(customFields.map(field => 
+    setCustomFields(customFields.map(field =>
       field.id === id ? { ...field, ...updates } : field
     ))
   }
@@ -69,7 +69,7 @@ export default function InteractiveListMUNPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
+
     try {
       const munData = {
         event_name: eventName,
@@ -79,7 +79,7 @@ export default function InteractiveListMUNPage() {
         registration_fees: Number(registrationFees),
         custom_fields: formatCustomFieldsForAPI(customFields)
       }
-      
+
       await createMUN(munData)
       confetti({
         particleCount: 100,
@@ -102,27 +102,27 @@ export default function InteractiveListMUNPage() {
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0))
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 to-indigo-800 p-4 md:p-8 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4 md:p-8 flex items-center justify-center">
       <Toaster position="top-center" reverseOrder={false} />
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-4xl bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden"
+        className="w-full max-w-4xl bg-white bg-opacity-30 backdrop-filter backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden"
       >
         <div className="p-8">
-          <h1 className="text-4xl font-bold text-white mb-6">Create Your MUN Event</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6">Create Your MUN Event</h1>
           <div className="flex justify-between mb-8">
             {steps.map((step, index) => (
               <div key={step} className="flex items-center">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     index <= currentStep ? 'bg-green-500' : 'bg-gray-300'
-                  } text-white font-bold`}
+                  } text-gray-800 font-bold`}
                 >
                   {index + 1}
                 </div>
-                <span className="ml-2 text-white">{step}</span>
+                <span className="ml-2 text-gray-800">{step}</span>
                 {index < steps.length - 1 && (
                   <div className="w-16 h-1 mx-2 bg-gray-300">
                     <div
@@ -134,7 +134,7 @@ export default function InteractiveListMUNPage() {
               </div>
             ))}
           </div>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <AnimatePresence mode="wait">
               {currentStep === 0 && (
@@ -147,14 +147,14 @@ export default function InteractiveListMUNPage() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <Label htmlFor="eventName" className="text-lg font-semibold text-gray-200">Event Name</Label>
+                    <Label htmlFor="eventName" className="text-lg font-semibold text-gray-600">Event Name</Label>
                     <div className="relative">
                       <Input
                         id="eventName"
                         value={eventName}
                         onChange={(e) => setEventName(e.target.value)}
                         required
-                        className="pl-10 bg-white bg-opacity-20 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-white placeholder:text-gray-300"
+                        className="pl-10 bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-800 placeholder:text-gray-400"
                         placeholder="Enter your event name"
                       />
                       <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -162,7 +162,7 @@ export default function InteractiveListMUNPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="date" className="text-lg font-semibold text-gray-200">Date</Label>
+                    <Label htmlFor="date" className="text-lg font-semibold text-gray-600">Date</Label>
                     <div className="relative">
                       <Input
                         id="date"
@@ -170,21 +170,21 @@ export default function InteractiveListMUNPage() {
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
                         required
-                        className="pl-10 bg-white bg-opacity-20 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-white placeholder:text-gray-300"
+                        className="pl-10 bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-800 placeholder:text-gray-400"
                       />
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="venue" className="text-lg font-semibold text-gray-200">Venue</Label>
+                    <Label htmlFor="venue" className="text-lg font-semibold text-gray-600">Venue</Label>
                     <div className="relative">
                       <Input
                         id="venue"
                         value={venue}
                         onChange={(e) => setVenue(e.target.value)}
                         required
-                        className="pl-10 bg-white bg-opacity-20 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-white placeholder:text-gray-300"
+                        className="pl-10 bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-800 placeholder:text-gray-400"
                         placeholder="Enter the venue"
                       />
                       <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -192,20 +192,20 @@ export default function InteractiveListMUNPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description" className="text-lg font-semibold text-gray-200">Description</Label>
+                    <Label htmlFor="description" className="text-lg font-semibold text-gray-600">Description</Label>
                     <Textarea
                       id="description"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       required
-                      className="bg-white bg-opacity-20 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-white placeholder:text-gray-300"
+                      className="bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-800 placeholder:text-gray-400"
                       placeholder="Describe your MUN event"
                       rows={4}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="registrationFees" className="text-lg font-semibold text-gray-200">Registration Fees</Label>
+                    <Label htmlFor="registrationFees" className="text-lg font-semibold text-gray-600">Registration Fees</Label>
                     <div className="relative">
                       <Input
                         id="registrationFees"
@@ -215,7 +215,7 @@ export default function InteractiveListMUNPage() {
                         value={registrationFees}
                         onChange={(e) => setRegistrationFees(e.target.value)}
                         required
-                        className="pl-10 bg-white bg-opacity-20 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-white placeholder:text-gray-300"
+                        className="pl-10 bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-800 placeholder:text-gray-400"
                         placeholder="Enter registration fees"
                       />
                       <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -233,7 +233,7 @@ export default function InteractiveListMUNPage() {
                   transition={{ duration: 0.3 }}
                   className="space-y-4"
                 >
-                  <h2 className="text-2xl font-semibold text-white mb-4">Custom Fields</h2>
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-4">Custom Fields</h2>
                   {customFields.map((field, index) => (
                     <motion.div
                       key={field.id}
@@ -247,11 +247,11 @@ export default function InteractiveListMUNPage() {
                         value={field.label}
                         onChange={(e) => updateCustomField(field.id, { label: e.target.value })}
                         placeholder="Field Label"
-                        className="bg-white bg-opacity-20 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-white placeholder:text-gray-300"
+                        className="bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-800 placeholder:text-gray-400"
                       />
                       {(field.type === 'dropdown' || field.type === 'checkbox' || field.type === 'radio') && (
                         <div>
-                          <Label className="text-gray-200">Options</Label>
+                          <Label className="text-gray-600">Options</Label>
                           {field.options?.map((option, optionIndex) => (
                             <div key={optionIndex} className="flex items-center space-x-2 mt-1">
                               <Input
@@ -261,7 +261,7 @@ export default function InteractiveListMUNPage() {
                                   newOptions[optionIndex] = e.target.value
                                   updateCustomField(field.id, { options: newOptions })
                                 }}
-                                className="bg-white bg-opacity-20 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-white placeholder:text-gray-300"
+                                className="bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-800 placeholder:text-gray-400"
                               />
                               <Button
                                 type="button"
@@ -271,7 +271,7 @@ export default function InteractiveListMUNPage() {
                                 }}
                                 variant="ghost"
                                 size="icon"
-                                className="text-gray-200 hover:text-white hover:bg-red-500"
+                                className="text-gray-600 hover:text-gray-800 hover:bg-red-500"
                               >
                                 <Minus className="h-4 w-4" />
                               </Button>
@@ -282,7 +282,7 @@ export default function InteractiveListMUNPage() {
                             onClick={() => updateCustomField(field.id, { options: [...(field.options || []), ''] })}
                             variant="outline"
                             size="sm"
-                            className="mt-2 text-white border-gray-300 hover:bg-indigo-600"
+                            className="mt-2 text-gray-800 border-gray-300 hover:bg-indigo-600"
                           >
                             <Plus className="h-4 w-4 mr-2" /> Add Option
                           </Button>
@@ -300,9 +300,9 @@ export default function InteractiveListMUNPage() {
                     </motion.div>
                   ))}
                   <div className="space-y-2">
-                    <Label className="text-lg font-semibold text-gray-200">Add Custom Field</Label>
+                    <Label className="text-lg font-semibold text-gray-600">Add Custom Field</Label>
                     <Select onValueChange={(value: FieldType) => setNewFieldType(value)}>
-                      <SelectTrigger className="bg-white bg-opacity-20 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-white">
+                      <SelectTrigger className="bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-gray-800">
                         <SelectValue placeholder="Select field type" />
                       </SelectTrigger>
                       <SelectContent>
@@ -316,7 +316,7 @@ export default function InteractiveListMUNPage() {
                     <Button
                       type="button"
                       onClick={addCustomField}
-                      className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white"
+                      className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-gray-800 font-semibold rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
                     >
                       <Plus className="h-4 w-4 mr-2" /> Add Field
                     </Button>
@@ -333,17 +333,17 @@ export default function InteractiveListMUNPage() {
                   transition={{ duration: 0.3 }}
                   className="space-y-4"
                 >
-                  <h2 className="text-2xl font-semibold text-white mb-4">Preview</h2>
-                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-6 space-y-4">
-                    <h3 className="text-xl font-bold text-white">{eventName}</h3>
-                    <p className="text-gray-200"><Calendar className="inline-block mr-2" /> {date}</p>
-                    <p className="text-gray-200"><MapPin className="inline-block mr-2" /> {venue}</p>
-                    <p className="text-gray-200">{description}</p>
-                    <p className="text-gray-200"><DollarSign className="inline-block mr-2" /> Registration Fee: {registrationFees}</p>
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-4">Preview</h2>
+                  <div className="bg-white bg-opacity-50 backdrop-blur-xl rounded-lg p-6 space-y-4 shadow-lg">
+                    <h3 className="text-xl font-bold text-gray-800">{eventName}</h3>
+                    <p className="text-gray-600"><Calendar className="inline-block mr-2" /> {date}</p>
+                    <p className="text-gray-600"><MapPin className="inline-block mr-2" /> {venue}</p>
+                    <p className="text-gray-600">{description}</p>
+                    <p className="text-gray-600"><DollarSign className="inline-block mr-2" /> Registration Fee: {registrationFees}</p>
                     {customFields.length > 0 && (
                       <div>
-                        <h4 className="text-lg font-semibold text-white mt-4 mb-2">Custom Fields</h4>
-                        <ul className="list-disc list-inside text-gray-200">
+                        <h4 className="text-lg font-semibold text-gray-800 mt-4 mb-2">Custom Fields</h4>
+                        <ul className="list-disc list-inside text-gray-600">
                           {customFields.map((field) => (
                             <li key={field.id}>{field.label} ({field.type})</li>
                           ))}
@@ -357,19 +357,19 @@ export default function InteractiveListMUNPage() {
 
             <div className="flex justify-between mt-8">
               {currentStep > 0 && (
-                <Button type="button" onClick={prevStep} className="bg-gray-600 hover:bg-gray-700 text-white">
+                <Button type="button" onClick={prevStep} className="bg-gray-600 hover:bg-gray-700 text-gray-800">
                   <ChevronLeft className="mr-2 h-5 w-5" /> Previous
                 </Button>
               )}
               {currentStep < steps.length - 1 ? (
-                <Button type="button" onClick={nextStep} className="bg-indigo-600 hover:bg-indigo-700 text-white ml-auto">
+                <Button type="button" onClick={nextStep} className="bg-indigo-600 hover:bg-indigo-700 text-gray-800 font-semibold rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg ml-auto">
                   Next <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               ) : (
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-lg ml-auto"
+                  className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-gray-800 font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-lg ml-auto"
                 >
                   {isSubmitting ? 'Creating...' : 'Submit MUN Listing'}
                   <ArrowRight className="ml-2 h-5 w-5" />

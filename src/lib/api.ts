@@ -1,5 +1,54 @@
 const API_BASE_URL = 'http://localhost:8000/api';
 
+export interface MUN {
+  id: number;
+  event_name: string;
+  date: string;
+  venue: string;
+  registration_fees: number;
+  participants?: string;
+  image?: string;
+  role?: string;
+}
+
+export interface UserProfile {
+  full_name: string;
+  email: string;
+  institution: string;
+  avatar: string;
+  bio: string;
+}
+
+export interface Skill {
+  name: string;
+  level: number;
+}
+
+export interface Achievement {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+}
+
+export interface Notification {
+  id: number;
+  message: string;
+  date: string;
+}
+
+export interface DashboardData {
+  user: UserProfile;
+  past_muns: MUN[];
+  registered_muns: MUN[];
+  upcoming_muns: MUN[];
+  skills: Skill[];
+  achievements: Achievement[];
+  notifications: Notification[];
+}
+
+
+
 export async function signUp(userData: {
   email: string;
   full_name: string;
@@ -45,7 +94,7 @@ export async function logout() {
   localStorage.removeItem('auth_token');
 }
 
-export async function fetchDashboardData() {
+export async function fetchDashboardData(): Promise<DashboardData> {
   const token = localStorage.getItem('auth_token');
   if (!token) {
     throw new Error('No authentication token found');
@@ -61,9 +110,38 @@ export async function fetchDashboardData() {
     throw new Error('Failed to fetch dashboard data');
   }
 
-  return response.json();
-}
+  const data = await response.json();
 
+  // Add mock data for features not provided by the backend
+  const mockData = {
+    user: {
+      ...data.user,
+      avatar: data.user.avatar || "https://api.dicebear.com/6.x/avataaars/svg?seed=" + data.user.full_name,
+      bio: data.user.bio || "Passionate MUN enthusiast and global citizen",
+    },
+    skills: [
+      { name: "Public Speaking", level: 75 },
+      { name: "Negotiation", level: 60 },
+      { name: "Research", level: 85 },
+      { name: "Diplomacy", level: 70 },
+    ],
+    achievements: [
+      { id: 1, title: "First MUN", description: "Attended your first Model UN conference", date: "2023-01-15" },
+      { id: 2, title: "Best Delegate", description: "Awarded Best Delegate at HMUN 2023", date: "2023-03-22" },
+      { id: 3, title: "Committee Leader", description: "Served as a committee leader", date: "2023-06-10" },
+    ],
+    notifications: [
+      { id: 1, message: "You've been assigned as delegate of France for HMUN 2024", date: "2023-07-01" },
+      { id: 2, message: "New research materials available for your upcoming MUN", date: "2023-07-03" },
+      { id: 3, message: "Deadline for position paper submission in 3 days", date: "2023-07-05" },
+    ],
+  };
+
+  return {
+    ...data,
+    ...mockData,
+  };
+}
 export async function createMUN(munData: {
   event_name: string;
   date: string;
@@ -476,4 +554,6 @@ export async function sendContactMessage(messageData: {
 
   return response.json();
 }
+
+
 

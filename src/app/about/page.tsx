@@ -120,9 +120,12 @@ export default function AboutPage() {
         <h2 className="text-3xl font-bold mb-6 text-center text-indigo-600">What We Do</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            { title: "Connect", icon: Users, content: "We connect students with MUN conferences, competitions, and fellowships across India, providing a centralized platform for opportunities." },
-            { title: "Educate", icon: Zap, content: "Through our comprehensive MUN guides and resources, we empower students with the knowledge and skills to excel in Model United Nations." },
-            { title: "Empower", icon: Rocket, content: "We empower organizers with tools and support to create impactful MUN conferences, fostering a vibrant community of future leaders." }
+            { title: "Connect", icon: Users, 
+              content: "At Delified, we bridge worlds and minds, creating networks and forge meaningful connections. This is where connections become catalysts for change." },
+            { title: "Educate", icon: Zap, 
+              content: "Empowering minds through immersive experiences. We craft events that foster learning, spark curiosity, and unlock new horizons of understanding." },
+            { title: "Grow", icon: Rocket, 
+              content: "Fueling ambitions with opportunities that drive progress. We create spaces where ideas thrive and dreams take shape." }
           ].map((item, index) => (
             <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.2 }}>
               <Card className="h-full hover:shadow-xl transition-shadow duration-300">
@@ -140,9 +143,11 @@ export default function AboutPage() {
       </motion.section>
 
       <motion.section className="mb-16 text-center" {...fadeInUp}>
+      <h2 className="text-3xl font-bold mb-6 text-center text-indigo-600">
       <Button asChild className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-full text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
           <Link href="/signup">Join Delified Today</Link>
         </Button>
+      </h2>
         <p className="text-xl mb-8">
           Be part of our thriving ecosystem where innovation meets ambition, collaboration sparks change, and every interaction leaves a lasting impact.
         </p>
