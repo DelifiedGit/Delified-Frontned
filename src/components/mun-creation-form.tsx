@@ -27,6 +27,8 @@ export function MunCreationForm() {
   const [registrationFees, setRegistrationFees] = useState('')
   const [customFields, setCustomFields] = useState<CustomField[]>([])
   const [newFieldType, setNewFieldType] = useState<FieldType>('text')
+  const [isFormComplete, setIsFormComplete] = useState(false)
+  const [formData, setFormData] = useState<any>(null)
   const router = useRouter()
 
   const addCustomField = () => {
@@ -51,14 +53,19 @@ export function MunCreationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const data = {
+      eventName,
+      date,
+      venue,
+      registrationFees,
+      customFields,
+    }
+    setFormData(data)
+    setIsFormComplete(true)
+  }
+
+  const submitMunListing = async () => {
     try {
-      const formData = {
-        eventName,
-        date,
-        venue,
-        registrationFees,
-        customFields,
-      }
       const response = await fetch('/api/muns/create', {
         method: 'POST',
         headers: {
@@ -194,8 +201,13 @@ export function MunCreationForm() {
           </Button>
         </div>
 
-        <Button type="submit">Submit MUN Listing</Button>
+        {isFormComplete ? (
+          <Button type="button" onClick={submitMunListing}>Submit MUN Listing</Button>
+        ) : (
+          <Button type="submit">Complete Form</Button>
+        )}
       </form>
     </div>
   )
 }
+

@@ -118,7 +118,7 @@ export function SiteHeader() {
             </Popover>
             <Link href="/mun-guide" className="text-sm hover:text-indigo-600 transition-colors">MUN Guide</Link>           
             {isLoggedIn && (
-              <Link href="/dashboard" className="text-sm hover:text-indigo-600 transition-colors">Dashboard</Link>
+              <Link href="/dash" className="text-sm hover:text-indigo-600 transition-colors">Dashboard</Link>
             )}
           </nav>
 

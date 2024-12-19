@@ -38,6 +38,7 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
   const [formData, setFormData] = useState<{ [key: string]: string | string[] }>({})
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isFormComplete, setIsFormComplete] = useState(false)
   const router = useRouter()
 
   const handleInputChange = (key: string, value: string | string[]) => {
@@ -57,6 +58,10 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsFormComplete(true)
+  }
+
+  const proceedToCheckout = async () => {
     setIsSubmitting(true)
     try {
       const token = localStorage.getItem('auth_token')
@@ -69,7 +74,7 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
         return
       }
       router.push(`/muns/${munId}/checkout?formData=${encodeURIComponent(JSON.stringify(formData))}`)
-    }catch (error) {
+    } catch (error) {
       console.error('Error redirecting to checkout:', error)
       toast.error('Failed to proceed to checkout. Please try again.')
     } finally {
@@ -215,14 +220,24 @@ export function MunRegistrationForm({ munTitle, munId, price, customFields }: Re
                   Next
                 </Button>
               ) : (
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-lg"
-                >
-                  {isSubmitting ? 'Processing...' : 'Proceed to Checkout'}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                isFormComplete ? (
+                  <Button
+                    type="button"
+                    onClick={proceedToCheckout}
+                    disabled={isSubmitting}
+                    className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-lg"
+                  >
+                    {isSubmitting ? 'Processing...' : 'Proceed to Checkout'}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-lg"
+                  >
+                    Complete Registration
+                  </Button>
+                )
               )}
             </div>
           </form>

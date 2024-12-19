@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchMUNById, processPayment, createRegistration } from '@/lib/api'
+import { ArrowRight, CreditCard, User, Calendar, Lock } from 'lucide-react'
 
 interface MUNEvent {
   id: string
@@ -24,6 +26,7 @@ export default function CheckoutPage({ params }: CheckoutProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [step, setStep] = useState(1)
   const router = useRouter()
   const searchParams = useSearchParams()
   const encodedFormData = searchParams.get('formData')
@@ -84,66 +87,169 @@ export default function CheckoutPage({ params }: CheckoutProps) {
   }
 
   if (isLoading) {
-    return <div className="text-center py-10">Loading checkout details...</div>
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-3xl font-bold text-indigo-600"
+        >
+          Loading your epic checkout experience...
+        </motion.div>
+      </div>
+    )
   }
 
   if (error || !munEvent) {
-    return <div className="text-center py-10 text-red-500">{error || 'MUN not found'}</div>
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-2xl font-bold text-red-500"
+        >
+          {error || 'Oops! MUN not found. Time for a coffee break?'}
+        </motion.div>
+      </div>
+    )
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Checkout for {munEvent.event_name}</h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Registration Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {Object.entries(formData).map(([key, value]) => (
-              <div key={key} className="mb-4">
-                <Label htmlFor={key}>{key}</Label>
-                <Input
-                  id={key}
-                  value={value}
-                  onChange={(e) => handleInputChange(key, e.target.value)}
-                  required
-                  disabled
-                />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <Label htmlFor="cardNumber">Card Number</Label>
-              <Input id="cardNumber" placeholder="1234 5678 9012 3456" required />
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-4xl font-extrabold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600"
+        >
+          You're Almost There!
+        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="mb-8">
+            <div className="flex items-center justify-between">
+              {[1, 2].map((i) => (
+                <div key={i} className="flex items-center">
+                  <div
+                    className={`rounded-full h-12 w-12 flex items-center justify-center ${
+                      step >= i ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'
+                    }`}
+                  >
+                    {i}
+                  </div>
+                  {i === 1 && (
+                    <div className={`h-1 w-full ${step >= 2 ? 'bg-indigo-600' : 'bg-gray-200'}`} />
+                  )}
+                </div>
+              ))}
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="expiryDate">Expiry Date</Label>
-                <Input id="expiryDate" placeholder="MM/YY" required />
-              </div>
-              <div>
-                <Label htmlFor="cvv">CVV</Label>
-                <Input id="cvv" placeholder="123" required />
-              </div>
+            <div className="flex justify-between mt-2">
+              <span className="text-sm font-medium text-indigo-600">Registration Details</span>
+              <span className="text-sm font-medium text-indigo-600">Payment</span>
             </div>
-          </CardContent>
-          <CardFooter>
-            <div className="w-full flex justify-between items-center">
-              <span className="text-2xl font-bold">Total: ₹{munEvent.registration_fees}</span>
-              <Button type="submit" disabled={isProcessing}>
-                {isProcessing ? 'Processing...' : 'Complete Payment'}
-              </Button>
-            </div>
-          </CardFooter>
-        </Card>
-      </form>
+          </div>
+        </motion.div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            {step === 1 && (
+              <Card className="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold text-indigo-700">Your Epic Details</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {Object.entries(formData).map(([key, value]) => (
+                    <div key={key} className="mb-4">
+                      <Label htmlFor={key} className="text-lg font-medium text-gray-700">{key}</Label>
+                      <Input
+                        id={key}
+                        value={value}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        required
+                        className="mt-1 bg-white bg-opacity-50 border-indigo-300 focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                  ))}
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 rounded-full hover:shadow-lg transition duration-300"
+                  >
+                    Next: Payment <ArrowRight className="ml-2" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            )}
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: step === 2 ? 1 : 0, y: step === 2 ? 0 : 20 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            {step === 2 && (
+              <Card className="bg-white bg-opacity-50 backdrop-filter backdrop-blur-lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold text-indigo-700">Secure Payment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-4">
+                    <Label htmlFor="cardNumber" className="text-lg font-medium text-gray-700">Card Number</Label>
+                    <div className="relative">
+                      <Input id="cardNumber" placeholder="1234 5678 9012 3456" required className="pl-10 bg-white bg-opacity-50 border-indigo-300 focus:border-indigo-500 focus:ring-indigo-500" />
+                      <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="expiryDate" className="text-lg font-medium text-gray-700">Expiry Date</Label>
+                      <div className="relative">
+                        <Input id="expiryDate" placeholder="MM/YY" required className="pl-10 bg-white bg-opacity-50 border-indigo-300 focus:border-indigo-500 focus:ring-indigo-500" />
+                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="cvv" className="text-lg font-medium text-gray-700">CVV</Label>
+                      <div className="relative">
+                        <Input id="cvv" placeholder="123" required className="pl-10 bg-white bg-opacity-50 border-indigo-300 focus:border-indigo-500 focus:ring-indigo-500" />
+                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <div className="w-full space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-2xl font-bold text-indigo-700">Total:</span>
+                      <span className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+                        ₹{munEvent.registration_fees}
+                      </span>
+                    </div>
+                    <Button
+                      type="submit"
+                      disabled={isProcessing}
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 rounded-full hover:shadow-lg transition duration-300"
+                    >
+                      {isProcessing ? 'Processing...' : 'Complete Payment'}
+                      <ArrowRight className="ml-2" />
+                    </Button>
+                  </div>
+                </CardFooter>
+              </Card>
+            )}
+          </motion.div>
+        </form>
+      </div>
     </div>
   )
 }
