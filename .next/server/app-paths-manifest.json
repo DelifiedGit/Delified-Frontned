@@ -8,5 +8,6 @@
   "/login/page": "app/login/page.js",
   "/muns/[id]/checkout/page": "app/muns/[id]/checkout/page.js",
   "/muns/[id]/confirmation/page": "app/muns/[id]/confirmation/page.js",
-  "/dash/page": "app/dash/page.js"
+  "/dash/page": "app/dash/page.js",
+  "/list-mun/page": "app/list-mun/page.js"
 }

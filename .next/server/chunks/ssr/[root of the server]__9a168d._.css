@@ -2325,6 +2325,11 @@ body {
   color: #ffffff80;
 }
 
+.placeholder\:text-gray-300::placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+}
+
 .focus-within\:relative:focus-within {
   position: relative;
 }
