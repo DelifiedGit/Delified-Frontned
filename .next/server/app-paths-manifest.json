@@ -1,12 +1,7 @@
 {
-  "/signup/page": "app/signup/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/login/page": "app/login/page.js",
-  "/muns/page": "app/muns/page.js",
   "/page": "app/page.js",
-  "/list-mun/page": "app/list-mun/page.js",
+  "/muns/page": "app/muns/page.js",
   "/muns/[id]/page": "app/muns/[id]/page.js",
-  "/mun-guide/page": "app/mun-guide/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/about/page": "app/about/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/contact/page": "app/contact/page.js"
 }
