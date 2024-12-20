@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Calendar, Users, Briefcase } from 'lucide-react'
+import Link from 'next/link'
 
 export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0)
@@ -92,7 +93,8 @@ export default function LandingPage() {
             >
               Be part of a thriving ecosystem where innovation meets ambition, collaboration sparks change, and every interaction leaves a lasting impact.
             </motion.p>
-          
+
+
             <motion.button
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: scrollY > 600 ? 1 : 0, y: scrollY > 600 ? 0 : 20 }}
@@ -100,11 +102,12 @@ export default function LandingPage() {
               className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-                           
+
             >
-              Get Started Now
+              <Link href="/community">
+                Get Started Now
+              </Link>
             </motion.button>
-            
           </div>
         </section>
       </main>

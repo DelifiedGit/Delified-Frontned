@@ -7,7 +7,6 @@ runtime.loadChunk("server/chunks/ssr/[root of the server]__9a168d._.css");
 runtime.loadChunk("server/chunks/ssr/node_modules_e45682._.js");
 runtime.loadChunk("server/chunks/ssr/[root of the server]__d15226._.js");
 runtime.loadChunk("server/chunks/ssr/node_modules_16929d._.js");
-runtime.loadChunk("server/chunks/ssr/_6cba92._.js");
-runtime.loadChunk("server/chunks/ssr/node_modules_7aa75e._.js");
+runtime.loadChunk("server/chunks/ssr/_076615._.js");
 runtime.getOrInstantiateRuntimeModule("[project]/.next-internal/server/app/mun-guide/page/actions.js [app-rsc] (ecmascript)", CHUNK_PUBLIC_PATH);
 module.exports = runtime.getOrInstantiateRuntimeModule("[project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/mun-guide/page { METADATA_0 => \"[project]/src/app/favicon.ico.mjs { IMAGE => \\\"[project]/src/app/favicon.ico [app-rsc] (static)\\\" } [app-rsc] (structured image object, ecmascript, Next.js server component)\", MODULE_1 => \"[project]/src/app/layout.tsx [app-rsc] (ecmascript, Next.js server component)\", MODULE_2 => \"[project]/node_modules/next/dist/client/components/not-found-error.js [app-rsc] (ecmascript, Next.js server component)\", MODULE_3 => \"[project]/src/app/mun-guide/page.tsx [app-rsc] (ecmascript, Next.js server component)\" } [app-rsc] (ecmascript)", CHUNK_PUBLIC_PATH).exports;
